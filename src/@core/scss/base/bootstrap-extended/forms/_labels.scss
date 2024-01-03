@@ -1,0 +1,30 @@
+//
+// Labels
+//
+
+// For use with horizontal and inline forms, when you need the label (or legend)
+// text to align with the form controls.
+.col-form-label,
+.col-form-label-lg,
+.col-form-label-sm {
+  @include font-size($form-label-font-size); // Override the `<legend>` default
+  align-self: center;
+}
+
+.form-label {
+   color: $myblack;
+}
+input::placeholder {
+  font-size: $small-font-size;
+}
+.required {
+  &:after{
+    content:" *";
+    color:red;
+  }
+}
+.availableTxt {
+  @include font-size($available-label-font-size);
+  color:$green;
+  padding-left: $available-label-padding-x;
+}

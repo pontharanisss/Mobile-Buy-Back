@@ -1,0 +1,219 @@
+
+div[disabled]
+{
+  pointer-events: none;
+  /* opacity: 0.7; */
+}
+.marginrow{
+  margin-top: -2% !important;
+}
+.bottombtn{
+  position: fixed !important;
+  bottom: 0 !important;
+  padding: 5px !important;
+  width: 100% !important;
+}
+.sidebarheader{
+  background-color: #20c997 !important ;
+}
+.modal-title{
+  color: white !important;
+}
+.cursor-pointer{
+  color: white !important;
+}
+.itemgroupsidebar{
+  height: 230px !important;
+}
+.modal-header{
+  background-color: #004080 !important ; 
+}
+.bg-light-success {
+  background: rgba(40, 199, 111, 0.12) !important;
+}
+.rounded-pill {
+  border-radius: 50rem !important;
+}
+.badge {
+  padding: 0.3rem 0.5rem;
+  text-align: center;
+  border-radius: 0.358rem;
+}
+.bg-light-success {
+  color: #28c76f !important;
+}
+.wraptextpre{
+  text-overflow: ellipsis !important;
+  white-space: unset !important;
+  background-color: white !important;
+}
+.wraptext{
+  text-overflow: ellipsis !important;
+  white-space: unset !important;
+}
+.vertical_align{
+  vertical-align:  top !important;
+}
+.paddingtop-1{
+  padding-top: 5px !important;
+}
+.color-picker{
+  display: block !important;
+}
+.end{
+  justify-content: flex-end !important ;
+}
+col[disabled]
+{
+  pointer-events: none;
+  opacity: 0.7;
+}
+.padding{
+  /* padding: 8px !important; */
+  margin-top: 6px !important;
+  margin-left: 15px !important;
+}
+.btn-top{
+  margin-top: 12px !important;
+}
+.label {
+  color: white;
+  padding: 4px !important;
+  
+}
+.MuiAutocomplete-inputRoot[class*="MuiOutlinedInput-root"] {
+  padding:0px;
+}
+.MuiAutocomplete-option[aria-selected="true"] {
+background-color: rgba(0, 0, 0, 0.08)  !important;
+}
+.MuiAutocomplete-option {
+cursor: pointer  !important;
+display: flex  !important;
+outline: 0  !important;
+box-sizing: border-box  !important;
+align-items: center  !important;
+padding-top: 6px  !important;
+padding-left: 16px  !important;
+padding-right: 16px  !important;
+padding-bottom: 6px  !important;
+justify-content: flex-start  !important;
+-webkit-tap-highlight-color: transparent;
+
+}
+.MuiFormControl-fullWidth:hover {
+  background-color: #fff !important;
+  border-color: #20c997 !important;
+}
+.MuiFormControl-fullWidth {
+  background-color: #fff !important;
+  background-clip: padding-box !important;
+  border: 1px solid #d8d6de !important;
+  border-radius: 0.357rem !important;
+}
+.MuiAutocomplete-listbox {
+margin: 0 !important;
+padding: 8px 0 !important;
+overflow: auto !important;
+list-style: none !important;
+max-height: 40vh !important;
+}
+.success {
+  background-color: #00cfe8 !important;
+  border: 1px solid !important;
+  border-radius: 6px !important;} /* Green */
+.labelcls{
+      background-color: #fff !important;
+      border: 1px solid #d8d6de !important;
+      border-radius: 0.357rem !important;
+      width: 52% !important;
+      margin-left: 12px !important;
+      padding: 6px !important;
+}
+table {
+  border-collapse: collapse;
+  width: 90%;
+  /* border: 1px solid black; */
+}
+
+table, th, td {
+  border: 1px solid #ddd;
+}
+th, td {
+  padding-top: 5px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 20px;
+}
+.headerstyle{
+  background-color: #00cfe8 !important;
+  color: white !important;
+}
+.align-center{
+  text-align: center !important;
+}
+.align-right{
+  text-align: right !important;
+}
+.margin-row{
+  margin: 12px !important; 
+}
+.border-align{
+  border: 1px solid #e5e3e3 !important;
+  margin-top: -10px !important;
+  border-radius: 5px !important;
+}
+.margin-top{
+  margin-top: 24px !important;
+}
+.dashboard-top {
+  margin-top: 38px !important;
+}
+.form-check-input:checked {
+  background-color: #4a2d9f !important;
+  border-color: #4a2d9f !important;
+}
+.form-check-input:focus {
+  border-color: #4a2d9f !important;
+  box-shadow: 0 2px 4px 0 rgb(32 54 201 / 40%) !important;
+}
+/* a {
+  color: black !important;
+} */
+.bIYKQe{
+  min-height: 0px !important;
+}
+.hyperlink{
+  text-decoration: underline !important;
+    color: red !important;
+}
+.autowidth {
+  width: 40%;
+}
+.das_head {
+  padding-left: 20px;
+  padding-top: 10px; 
+  font-size: 14pt;
+  color: #000000;
+  font-weight: bold;
+}
+.addbtn{
+  font-size: 35px !important;
+  margin-top: 24px !important;
+  color: #20c997 !important
+}
+.total_valuestyle{
+  font-size: 17px !important;
+  color: #ea5455 !important;
+  margin-left: 10px !important;
+}
+.wizard .card{
+  box-shadow: 0 4px 24px 0 rgb(34 41 47 / 10%) !important;
+}
+.jmxCsa {
+  width: 50% !important;
+  margin-left: 300px !important;
+}
+.bold{
+  font-weight: 900 !important;
+}
