@@ -8,7 +8,8 @@ import DataTable from 'react-data-table-component'
 import '../../../assets/style/style.css'
 // ** Reactstrap Imports
 import {
-  Card, CardHeader, CardTitle, CardBody, UncontrolledTooltip, Input
+  Row,
+  Col, Label, Card, CardHeader, CardTitle, CardBody, UncontrolledTooltip, Input
 } from 'reactstrap'
 // ** Styles
 import '@styles/react/apps/app-invoice.scss'
@@ -19,7 +20,7 @@ const Inward = () => {
 
   // const user_id = JSON.parse(localStorage.getItem('userDetails'))
   const [inwardList, setInwardList] = useState([])
-
+  const [searchValue, setSearchValue] = useState('')
 
   const handleChange = (state) => {
     setSelectedData(state.selectedRows)
@@ -162,6 +163,11 @@ const Inward = () => {
     setInwardList([{ id: '1', imei_no: '353906104983912', product_name: 'iPhone 11 Pro Max', brand: 'Apple', purchase_amount: '100', sales_amount: 1, checked: false, read_only: true }, { id: '2', imei_no: '353906104983913', product_name: 'iPhone 13 Pro Max', brand: 'Apple', purchase_amount: '200000', sales_amount: 1, checked: false, read_only: true }])
   }
 
+  const handleFilter = e => {
+    const value = e.target.value
+    setSearchValue(value)
+  }
+
   useEffect(() => {
     getInwardList()
   }, [])
@@ -175,6 +181,21 @@ const Inward = () => {
           <CardTitle tag='h4'>Inward</CardTitle>
         </CardHeader>
         <CardBody>
+          <Row className='justify-content-end mx-0'>
+            <Col className='d-flex align-items-center justify-content-end mt-1' md='6' sm='12'>
+              <Label className='me-1' for='search-input'>
+                Search
+              </Label>
+              <Input style={{ maxWidth:"258px"}}
+                className='mb-50'
+                type='text'
+                bsSize='sm'
+                id='search-input'
+                value={searchValue}
+                onChange={handleFilter}
+              />
+            </Col>
+          </Row>
           <div className='sc-dmctIk fuLPYh react-dataTable'>
           <DataTable
 

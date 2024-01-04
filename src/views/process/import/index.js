@@ -4,20 +4,21 @@ import DataTable from "react-data-table-component"
 import { Button, Card, Col, Row, CardBody } from "reactstrap"
 import xlsx from "xlsx"
 import "@styles/react/libs/tables/react-dataTable-component.scss"
+import "./import_css.scss"
 import { toast } from 'react-hot-toast'
 import UILoader from "@components/ui-loader"
 
 
 const TotalRecordsCard = ({ totalRecords }) => {
   return (
-    <Card >
+    <div className="card_box">
       <CardBody>
         <div className="d-flex justify-content-between align-items-center">
           <div>
             <h2 className="fw-bolder mb-0">{totalRecords}</h2>
             <p className="card-text">Total Records</p>
           </div>
-          <div className="avatar avatar-stats p-50 m-0 bg-light-primary">
+          <div style={{marginLeft:"20px"}} className="avatar avatar-stats p-50 bg-light-primary">
             <div className="avatar-content">
               <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
@@ -35,7 +36,7 @@ const TotalRecordsCard = ({ totalRecords }) => {
           </div>
         </div>
       </CardBody>
-    </Card>
+    </div>
   )
 }
 
@@ -43,7 +44,7 @@ const CustomHeader = ({ onImportClick, totalRecords }) => {
   return (
     <div className="invoice-list-table-header w-100">
       <Row className="mb-0">
-        <Col md="2" className="d-flex align-items-center justify-content-end">
+        <Col sm="2" className="d-flex align-items-center justify-content-center">
           <Button color="primary" onClick={onImportClick}>
             Import
           </Button>
@@ -127,14 +128,13 @@ const Import = () => {
     <div className="invoice-list-wrapper">
       <Card>
         <div className="invoice-list-dataTable">
-          <div className="datatable-header">
+          <div className="datatable-header header">
             <CustomHeader onImportClick={onImportClick} totalRecords={tableData.length} />
           </div>
-          <div className="datatable-content" style={{ maxHeight: "300px", overflowY: "auto" }}>
+          <div className="datatable-content react-dataTable">
             <DataTable
               pagination={false}
               noDataComponent=""
-              subHeader={true}
               columns={columns}
               data={tableData}
               sortIcon={<ChevronDown />}
