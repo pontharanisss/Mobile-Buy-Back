@@ -3,9 +3,9 @@ import { FileText } from 'react-feather'
 
 export default [
   {
-    id: 'import',
-    title: 'In-Transit Import',
+    id: 'sales',
+    title: 'Sales  ',
     icon: <FileText size={20} />,
-    navLink: 'process/import'
+    navLink: 'transaction/sales'
   }
 ]

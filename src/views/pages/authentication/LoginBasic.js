@@ -114,7 +114,7 @@ const LoginBasic = () => {
                   </g>
                 </g>
               </svg> */}
-              <h2 className='brand-text text-primary ms-1'>SSK</h2>
+              <h2 className='brand-text text-primary ms-1'>Mobile Buy-Back</h2>
             </Link>
             {/* <CardTitle tag='h4' className='mb-1'>
               Welcome to Zity Ztyle! 👋

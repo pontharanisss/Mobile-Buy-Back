@@ -7,16 +7,15 @@ import FormRoutes from './Forms'
 import PagesRoutes from './Pages'
 import TablesRoutes from './Tables'
 import ChartsRoutes from './Charts'
-import DashboardRoutes from './Dashboards'
 import UiElementRoutes from './UiElements'
 import ExtensionsRoutes from './Extensions'
 import PageLayoutsRoutes from './PageLayouts'
 import AuthenticationRoutes from './Authentication'
-import MastersRoutes from './Masters'
+import InwardRoutes from './inward'
 
-import EmployeeRoutes from './Employee'
 
-import ReportRoutes from './Report'
+import SalesRoutes from './Sales'
+import StockRoutes from './Stock'
 // ** Layouts
 import BlankLayout from '@layouts/BlankLayout'
 import VerticalLayout from '@src/layouts/VerticalLayout'
@@ -45,18 +44,17 @@ const DefaultRoute = '/dashboard'
 // ** Merge Routes
 const Routes = [
   ...AuthenticationRoutes,
-  ...DashboardRoutes,
-  ...AppRoutes,
-  ...PagesRoutes,
-  ...UiElementRoutes,
-  ...ExtensionsRoutes,
-  ...PageLayoutsRoutes,
+  // ...AppRoutes,
+  // ...PagesRoutes,
+  // ...UiElementRoutes,
+  // ...ExtensionsRoutes,
+  // ...PageLayoutsRoutes,
   ...FormRoutes,
-  ...TablesRoutes,
-  ...ChartsRoutes,
-  ...MastersRoutes,
-  ...EmployeeRoutes,
-  ...ReportRoutes
+  // ...TablesRoutes,
+  // ...ChartsRoutes,
+  ...InwardRoutes,
+  ...SalesRoutes,
+  ...StockRoutes
 ]
 
 const getRouteMeta = route => {

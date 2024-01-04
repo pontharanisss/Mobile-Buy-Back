@@ -12,7 +12,7 @@ const ExtensionsHeader = props => {
           {props.title}
         </p>
         {props.link ? (
-          <a href={props.link} target='_blank' rel='noopener noreferrer'>
+          <a href={props.link} style={{display:"flex"}} target='_blank' rel='noopener noreferrer'>
             {props.subTitle}
           </a>
         ) : (

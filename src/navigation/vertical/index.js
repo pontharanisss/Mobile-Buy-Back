@@ -1,8 +1,9 @@
 // ** Navigation imports 
 
 import forms from './forms'
-import master from './master'
-import report from './report'
+import inward from './inward'
+import Sales from './sales'
+import Stock from './stock'
 
 // ** Merge & Export
-export default [...forms, ...master, ...report]
+export default [...forms, ...inward, ...Sales, ...Stock]

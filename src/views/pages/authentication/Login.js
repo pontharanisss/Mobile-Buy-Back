@@ -117,7 +117,9 @@ const Login = () => {
       // alert('Please enter the user name')
       setErrors({...errors, passworddata:true})
     } else {
-      setErrors({...errors, username:false, passworddata:false})     
+      setErrors({...errors, username:false, passworddata:false}) 
+      localStorage.setItem('userDetails', JSON.stringify({user_id:'001'}))
+      navigate('/process/import')    
      await loginAPI()
     }
   }

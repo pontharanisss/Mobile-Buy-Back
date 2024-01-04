@@ -20,7 +20,7 @@ const NavbarUser = (props) => {
   return ( 
     <>
        <div className="align-items-center" style={{ display: 'flex', fontSize: '22px' }}>
-        <span style={{ color: '#9d9d9d'}}>SSK</span>
+        <span style={{ color: '#9d9d9d' }}>Mobile Buy-Back</span>
       </div> 
       <ul className="nav navbar-nav align-items-center ms-auto">
         <NavItem className="d-none d-lg-block">
