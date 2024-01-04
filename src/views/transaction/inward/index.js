@@ -184,7 +184,7 @@ const Inward = () => {
             subHeader={true}
             columns={columns}
             responsive={true}
-
+              searchable
             data={inwardList}
             sortIcon={<ChevronDown />}
             className='react-dataTable'

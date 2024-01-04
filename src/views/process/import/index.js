@@ -1,35 +1,65 @@
 import React, { useState, useRef } from "react"
 import { ChevronDown } from "react-feather"
 import DataTable from "react-data-table-component"
-import { ReactSpreadsheetImport } from "react-spreadsheet-import"
-import { Button, Card, Col, Row } from "reactstrap"
+import { Button, Card, Col, Row, CardBody } from "reactstrap"
 import xlsx from "xlsx"
-import "@styles/react/apps/app-invoice.scss"
 import "@styles/react/libs/tables/react-dataTable-component.scss"
+import { toast } from 'react-hot-toast'
+import UILoader from "@components/ui-loader"
 
-const CustomHeader = ({ onImportClick }) => {
+
+const TotalRecordsCard = ({ totalRecords }) => {
   return (
-    <div className="invoice-list-table-header w-100 py-2">
-      <Row className="pb-2">
-        <Col md="10" className="actions-right d-flex align-items-center">
-          <div
-            className="d-flex align-items-center"
-            style={{ paddingRight: "10px" }}
-          >
-            <Button color="primary" onClick={onImportClick}>
-              Import
-            </Button>
+    <Card >
+      <CardBody>
+        <div className="d-flex justify-content-between align-items-center">
+          <div>
+            <h2 className="fw-bolder mb-0">{totalRecords}</h2>
+            <p className="card-text">Total Records</p>
           </div>
+          <div className="avatar avatar-stats p-50 m-0 bg-light-primary">
+            <div className="avatar-content">
+              <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                <rect x="9" y="9" width="6" height="6"></rect>
+                <line x1="9" y1="1" x2="9" y2="4"></line>
+                <line x1="15" y1="1" x2="15" y2="4"></line>
+                <line x1="9" y1="20" x2="9" y2="23"></line>
+                <line x1="15" y1="20" x2="15" y2="23"></line>
+                <line x1="20" y1="9" x2="23" y2="9"></line>
+                <line x1="20" y1="14" x2="23" y2="14"></line>
+                <line x1="1" y1="9" x2="4" y2="9"></line>
+                <line x1="1" y1="14" x2="4" y2="14"></line>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </CardBody>
+    </Card>
+  )
+}
+
+const CustomHeader = ({ onImportClick, totalRecords }) => {
+  return (
+    <div className="invoice-list-table-header w-100">
+      <Row className="mb-0">
+        <Col md="2" className="d-flex align-items-center justify-content-end">
+          <Button color="primary" onClick={onImportClick}>
+            Import
+          </Button>
         </Col>
+        <Col md="4" className="d-flex align-items-center ml-auto">
+          <TotalRecordsCard totalRecords={totalRecords} />
+        </Col>
+        
       </Row>
     </div>
   )
 }
 
 const Import = () => {
-  const [isImportPopupOpen, setImportPopupOpen] = useState(false)
   const [tableData, setTableData] = useState([])
-
+  const [loading, setLoading] = useState(false)
   const fileInputRef = useRef(null)
 
   const handleSort = () => {
@@ -42,95 +72,88 @@ const Import = () => {
     }
   }
 
-  const onClose = () => {
-    setImportPopupOpen(false)
-  }
-
   const onSubmit = () => {
-    setImportPopupOpen(false)
+    // Submit logic here
+    setLoading(false)
   }
 
   const onFileChange = (e) => {
     const file = e.target.files[0]
     if (file) {
-      const reader = new FileReader()
+      if (file.name.endsWith(".xlsx")) {
+        setLoading(true)
+        const reader = new FileReader()
 
-      reader.onload = (event) => {
-        const data = new Uint8Array(event.target.result)
-        const workbook = xlsx.read(data, { type: "array" })
-        const sheetName = workbook.SheetNames[0]
-        const worksheet = workbook.Sheets[sheetName]
-        const jsonData = xlsx.utils.sheet_to_json(worksheet, { header: 1 })
-        const header = jsonData[0]
-        const dataRows = jsonData.slice(1)
-        const formattedData = dataRows.map((row) => header.reduce((acc, key, index) => {
-          acc[key] = row[index]
-          return acc
-        }, {})
-        )
-        setTableData(formattedData)
+        reader.onload = (event) => {
+          const data = new Uint8Array(event.target.result)
+          const workbook = xlsx.read(data, { type: "array" })
+          const sheetName = workbook.SheetNames[0]
+          const worksheet = workbook.Sheets[sheetName]
+          const jsonData = xlsx.utils.sheet_to_json(worksheet, { header: 1 })
+          const header = jsonData[0]
+          const dataRows = jsonData.slice(1)
+          const formattedData = dataRows.map((row) => header.reduce(
+            (acc, key, index) => {
+              acc[key] = row[index]
+              return acc
+            },
+            {}
+          )
+          )
+          setTableData(formattedData)
+          setLoading(false)
+        }
+
+        reader.readAsArrayBuffer(file)
+      } else {
+        // Show toast notification for invalid file
+        toast.error("Please choose a .xlsx file only", {
+          duration: 2000,
+          style: { color: "#000", backgroundColor: "#d7d2d2" }
+        })
+        // Clear the file input
+        e.target.value = null
       }
-      reader.readAsArrayBuffer(file)
     }
   }
+
   const columns = Object.keys(tableData[0] || {}).map((key) => ({
     name: key,
     selector: key,
     sortable: true
   }))
+
   return (
     <div className="invoice-list-wrapper">
       <Card>
-        <div
-          className="invoice-list-dataTable react-dataTable"
-          style={{ marginBottom: "15px" }}
-        >
-          <DataTable
-            pagination
-            noDataComponent="There are no records to display"
-            subHeader={true}
-            columns={columns}
-            data={tableData}
-            sortIcon={<ChevronDown />}
-            className="react-dataTable"
-            subHeaderComponent={<CustomHeader onImportClick={onImportClick} />}
-            onSort={handleSort}
-          />
+        <div className="invoice-list-dataTable">
+          <div className="datatable-header">
+            <CustomHeader onImportClick={onImportClick} totalRecords={tableData.length} />
+          </div>
+          <div className="datatable-content" style={{ maxHeight: "300px", overflowY: "auto" }}>
+            <DataTable
+              pagination={false}
+              noDataComponent=""
+              subHeader={true}
+              columns={columns}
+              data={tableData}
+              sortIcon={<ChevronDown />}
+              className="react-dataTable"
+              onSort={handleSort}
+              noHeader={true}
+            />
+          </div>
+
+          <div className="card-footer d-flex justify-content-end">
+            <Button color="success" onClick={onSubmit}>
+              Submit
+            </Button>
+          </div>
         </div>
       </Card>
 
-      <div
-        style={{
-          position: "fixed",
-          bottom: "20px",
-          right: "20px",
-          zIndex: 999
-        }}
-      >
-        <Button color="success" onClick={onSubmit}>
-          Submit
-        </Button>
-      </div>
-
-      <input
-        type="file"
-        ref={fileInputRef}
-        style={{ display: "none" }}
-        onChange={onFileChange}
-      />
-
-      <ReactSpreadsheetImport
-        isOpen={isImportPopupOpen}
-        onClose={onClose}
-        onSubmit={onSubmit}
-        fields={[] /* Add your actual fields here */}
-        matchColumnsStepHook={(table, rawData, columns) => {
-          console.log(table, "table")
-          console.log(rawData, "rawData")
-          console.log(columns, "columns")
-          return table
-        }}
-      />
+      <input type="file" ref={fileInputRef} style={{ display: "none" }} onChange={onFileChange} />
+      {loading && <UILoader />}
     </div>
   )
 }
