@@ -4,8 +4,8 @@ import { FileText } from 'react-feather'
 export default [
   {
     id: 'import',
-    title: 'In-Transit Import',
+    title: 'Cancelled Product',
     icon: <FileText size={20} />,
-    navLink: 'process'
+    navLink: 'product/cancelledproducts'
   }
 ]

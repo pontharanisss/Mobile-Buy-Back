@@ -1,5 +1,5 @@
 // ** React Imports
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import React, { useState, useEffect  } from 'react'
 import {
   Card, CardHeader, CardTitle, CardBody, UncontrolledTooltip, Input, Button, Row, Col
@@ -9,21 +9,16 @@ import DataTable from 'react-data-table-component'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 import '@styles/base/pages/app-invoice.scss'
 
-const Sales = () => {
+const ImportList = () => {
   // ** Store vars
-  const navigate = useNavigate()
-  const [salesList, setSalesList] = useState([])
+  const [transactionList, setTransactionList] = useState([])
 
-  const viewSales = () => {
-    navigate('/transaction/sales/add')
-  }
-
-  const getSalesList = () => {
-    setSalesList([{ id: '1', invoice_no:'2000', date: '01-01-2024', customer_name: 'VKC Traders', total_products: 10, sales_amount: 10000 }, { id: '2', invoice_no:'2000', date: '01-01-2024', customer_name: 'Sri Balaji Super Market', total_products: 20, sales_amount: 20000 }, { id: '3', invoice_no:'3040', date: '02-01-2024', customer_name: 'Amazon Online Shop', total_products: 25, sales_amount: 25000 }, { id: '4', invoice_no:'4009', date: '02-01-2024', customer_name: 'Sakthi Note Books', total_products: 30, sales_amount: 30000 }, { id: '5', invoice_no:'5093', date: '04-01-2024', customer_name: 'Gannapathi Stores', total_products: 40, sales_amount: 40000 }])
+  const getTransactionList = () => {
+    setTransactionList([{ id: '1', transaction_no:'2000', date: '01-01-2024', total_products: 10}, { id: '2', transaction_no:'2001', date: '01-01-2024', total_products: 20 }, { id: '3', transaction_no:'3040', date: '02-01-2024', total_products: 25 }, { id: '4', transaction_no:'4009', date: '02-01-2024', total_products: 30}, { id: '5', transaction_no:'5093', date: '04-01-2024', total_products: 40 }])
   }
 
   useEffect(() => {
-    getSalesList()
+    getTransactionList()
   }, [])
 
   const columns = [ 
@@ -42,14 +37,14 @@ const Sales = () => {
       }
     },
     {
-      name: 'Invoice No.',
+      name: 'Transaction No.',
       sortable: true,
       minWidth: '100px',
       id: 'id',
       cell: (row)  => {
         return (
           <div className='justify-content-left align-items-center paddingtop-1'>
-            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{'#'}{row.invoice_no}</h6>
+            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{'#'}{row.transaction_no}</h6>
           </div>
 
         )
@@ -69,25 +64,7 @@ const Sales = () => {
 
         )
       }
-    },
-
-  
-    {
-      name: 'Customer Name',
-      sortable: true,
-      minWidth: '200px',
-      id: 'customer_name',
-      selector: row => row.customer_name,
-      // selector: row => row.client.name,
-      cell: row => {
-        return (
-          <div className='justify-content-left  paddingtop-1'>
-            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.customer_name}</h6>
-          </div>
-
-        )
-      }
-    }, 
+    },  
     {
       name: 'Total Products',
       sortable: true,
@@ -102,30 +79,14 @@ const Sales = () => {
           </div>          
         )
       }
-    }, 
-    {
-      name: 'Total Sales Amount',
-      sortable: true,
-      minWidth: '200px',
-      right: true,
-      id: 'sales_amount',
-      selector: row => row.sales_amount,
-      cell: row => {
-        return (
-          <div className='justify-content-right align-items-center paddingtop-1'>
-            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.sales_amount}</h6>
-          </div>
-
-        )
-      }
-    },      
+    },     
     
     {
       name: 'Action',
       minWidth: '110px',
       cell: (row) => (
         <div className='column-action d-flex align-items-center'>          
-          <Eye size={14} className='me-50' id={`edit-tooltip-${row.rownum}`} onClick={() => viewSales(row)} />
+          <Eye size={14} className='me-50' id={`edit-tooltip-${row.rownum}`} />
           <UncontrolledTooltip placement='top' target={`edit-tooltip-${row.rownum}`}>
             View  
         </UncontrolledTooltip>
@@ -139,7 +100,7 @@ const Sales = () => {
     <div className="invoice-list-wrapper">
       <Card>
         <CardHeader className='border-bottom'>
-          <CardTitle tag='h4'>Sales</CardTitle>
+          <CardTitle tag='h4'>In-Transit Import</CardTitle>
         </CardHeader>
         <CardBody>
         <div className='invoice-list-table-header w-100 py-2'>
@@ -159,8 +120,8 @@ const Sales = () => {
                   <option value='50'>50</option>
                 </Input>
               </div>
-              <Button tag={Link} to='/transaction/sales/add' color='primary'>
-                Add
+              <Button tag={Link} to='/process/import' color='primary'>
+                Import
               </Button>
             </Col>   
             <Col lg='6'className='actions-right d-flex align-items-center justify-content-lg-end flex-lg-nowrap flex-wrap mt-lg-0 mt-1 pe-lg-1 p-0'>
@@ -187,7 +148,7 @@ const Sales = () => {
             pagination
             columns={columns}
             responsive={true}
-            data={salesList}
+            data={transactionList}
             sortIcon={<ChevronDown />}
             className='react-dataTable'
             defaultSortField='id'
@@ -202,4 +163,4 @@ const Sales = () => {
   )
 }
 
-export default Sales
+export default ImportList
