@@ -1,5 +1,5 @@
 // ** React Imports
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import React, { useState, useEffect  } from 'react'
 import {
   Card, CardHeader, CardTitle, CardBody, UncontrolledTooltip, Input, Button, Row, Col
@@ -11,6 +11,7 @@ import '@styles/base/pages/app-invoice.scss'
 
 const ImportList = () => {
   // ** Store vars
+  const navigate = useNavigate()
   const [transactionList, setTransactionList] = useState([])
 
   const getTransactionList = () => {
@@ -21,6 +22,9 @@ const ImportList = () => {
     getTransactionList()
   }, [])
 
+   const viewtransaction_details = () => {
+    navigate('/process/viewTransactiondetails')
+  }
   const columns = [ 
     {
       name: 'S.No.',
@@ -86,7 +90,7 @@ const ImportList = () => {
       minWidth: '110px',
       cell: (row) => (
         <div className='column-action d-flex align-items-center'>          
-          <Eye size={14} className='me-50' id={`edit-tooltip-${row.rownum}`} />
+          <Eye size={14} className='me-50' id={`edit-tooltip-${row.rownum}`} onClick={() => viewtransaction_details(row)}/>
           <UncontrolledTooltip placement='top' target={`edit-tooltip-${row.rownum}`}>
             View  
         </UncontrolledTooltip>
