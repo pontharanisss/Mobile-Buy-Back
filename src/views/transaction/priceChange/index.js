@@ -156,7 +156,7 @@ const CustomHeader = ({  totalRecords, totalPurchase, totalTax, totalSales }) =>
   )
 }
 
-const Inward = () => {
+const PriceChange = () => {
   // ** Store vars
 
   // const user_id = JSON.parse(localStorage.getItem('userDetails'))
@@ -314,9 +314,9 @@ const Inward = () => {
       }
     },
     {
-      name: 'Tot. Pur',
+      name: 'Old sales Amt',
       sortable: true,
-      minWidth: '100px',
+      minWidth: '120px',
       right: true,
       id: 'total',
       selector: row => row.total,
@@ -367,7 +367,7 @@ const Inward = () => {
 
       <Card>
         <CardHeader className='border-bottom' style={{justifyContent:"flex-start"}}>
-          <CardTitle tag='h4'>Inward</CardTitle>
+          <CardTitle tag='h4'>Price Change</CardTitle>
           <div className="row datatable-header header">
             <CustomHeader totalRecords={100} totalPurchase={'20,000'} totalTax={'1,000'} totalSales={'30,0000'} />
           </div>
@@ -419,4 +419,4 @@ const Inward = () => {
   )
 }
 
-export default Inward
+export default PriceChange

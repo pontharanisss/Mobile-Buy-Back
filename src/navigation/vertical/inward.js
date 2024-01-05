@@ -7,5 +7,11 @@ export default [
     title: 'Inward  ',
     icon: <FileText size={20} />,
     navLink: 'transaction/inward'
+  },
+  {
+    id: 'price-change',
+    title: 'Price Change  ',
+    icon: <FileText size={20} />,
+    navLink: 'transaction/priceChange'
   }
 ]
