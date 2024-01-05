@@ -18,12 +18,12 @@ import '@styles/react/libs/tables/react-dataTable-component.scss'
 
 const TotalRecordsCard = ({ totalRecords }) => {
   return (
-    <div className="card_box">
+    <div className="col-sm-6 col-lg-3 card_box_head total_record">
       <CardBody>
         <div className="d-flex justify-content-between align-items-center">
           <div>
             <h2 className="fw-bolder mb-0">{totalRecords}</h2>
-            <p className="card-text">Total Records</p>
+            <p className="card-text">Total Products</p>
           </div>
           <div style={{ marginLeft: "20px" }} className="avatar avatar-stats p-50 bg-light-primary">
             <div className="avatar-content">
@@ -47,12 +47,108 @@ const TotalRecordsCard = ({ totalRecords }) => {
   )
 }
 
-const CustomHeader = ({  totalRecords }) => {
+const CardPurchase = ({ totalRecords }) => {
+  return (
+    <div className="col-sm-6 col-lg-3 card_box_head total_purchase">
+      <CardBody>
+        <div className="d-flex justify-content-between align-items-center">
+          <div>
+            <h2 className="fw-bolder mb-0">{totalRecords}</h2>
+            <p className="card-text">Total Purchase</p>
+          </div>
+          <div style={{ marginLeft: "20px" }} className="avatar avatar-stats p-50 bg-light-primary">
+            <div className="avatar-content">
+              <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                <rect x="9" y="9" width="6" height="6"></rect>
+                <line x1="9" y1="1" x2="9" y2="4"></line>
+                <line x1="15" y1="1" x2="15" y2="4"></line>
+                <line x1="9" y1="20" x2="9" y2="23"></line>
+                <line x1="15" y1="20" x2="15" y2="23"></line>
+                <line x1="20" y1="9" x2="23" y2="9"></line>
+                <line x1="20" y1="14" x2="23" y2="14"></line>
+                <line x1="1" y1="9" x2="4" y2="9"></line>
+                <line x1="1" y1="14" x2="4" y2="14"></line>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </CardBody>
+    </div>
+  )
+}
+
+const CardTax = ({ totalRecords }) => {
+  return (
+    <div className="col-sm-6 col-lg-3 card_box_head total_tax">
+      <CardBody>
+        <div className="d-flex justify-content-between align-items-center">
+          <div>
+            <h2 className="fw-bolder mb-0">{totalRecords}</h2>
+            <p className="card-text">Total Tax</p>
+          </div>
+          <div style={{ marginLeft: "20px" }} className="avatar avatar-stats p-50 bg-light-primary">
+            <div className="avatar-content">
+              <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                <rect x="9" y="9" width="6" height="6"></rect>
+                <line x1="9" y1="1" x2="9" y2="4"></line>
+                <line x1="15" y1="1" x2="15" y2="4"></line>
+                <line x1="9" y1="20" x2="9" y2="23"></line>
+                <line x1="15" y1="20" x2="15" y2="23"></line>
+                <line x1="20" y1="9" x2="23" y2="9"></line>
+                <line x1="20" y1="14" x2="23" y2="14"></line>
+                <line x1="1" y1="9" x2="4" y2="9"></line>
+                <line x1="1" y1="14" x2="4" y2="14"></line>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </CardBody>
+    </div>
+  )
+}
+
+const CardSales = ({ totalRecords }) => {
+  return (
+    <div className="col-sm-6 col-lg-3 card_box_head total_sales">
+      <CardBody>
+        <div className="d-flex justify-content-between align-items-center">
+          <div>
+            <h2 className="fw-bolder mb-0">{totalRecords}</h2>
+            <p className="card-text">Total Sales</p>
+          </div>
+          <div style={{ marginLeft: "20px" }} className="avatar avatar-stats p-50 bg-light-primary">
+            <div className="avatar-content">
+              <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                <rect x="9" y="9" width="6" height="6"></rect>
+                <line x1="9" y1="1" x2="9" y2="4"></line>
+                <line x1="15" y1="1" x2="15" y2="4"></line>
+                <line x1="9" y1="20" x2="9" y2="23"></line>
+                <line x1="15" y1="20" x2="15" y2="23"></line>
+                <line x1="20" y1="9" x2="23" y2="9"></line>
+                <line x1="20" y1="14" x2="23" y2="14"></line>
+                <line x1="1" y1="9" x2="4" y2="9"></line>
+                <line x1="1" y1="14" x2="4" y2="14"></line>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </CardBody>
+    </div>
+  )
+}
+
+const CustomHeader = ({  totalRecords, totalPurchase, totalTax, totalSales }) => {
   return (
     <div className="invoice-list-table-header w-100">
       <Row className="mb-0">
         <Col  className="d-flex align-items-center ml-auto">
           <TotalRecordsCard totalRecords={totalRecords} />
+          <CardPurchase totalRecords={totalPurchase} />
+          <CardTax totalRecords={totalTax} />
+          <CardSales totalRecords={totalSales} />
         </Col>
 
       </Row>
@@ -272,8 +368,8 @@ const Inward = () => {
       <Card>
         <CardHeader className='border-bottom' style={{justifyContent:"flex-start"}}>
           <CardTitle tag='h4'>Inward</CardTitle>
-          <div className="datatable-header header">
-            <CustomHeader totalRecords={100} />
+          <div className="row datatable-header header">
+            <CustomHeader totalRecords={100} totalPurchase={'20,000'} totalTax={'1,000'} totalSales={'30,0000'} />
           </div>
         </CardHeader>
         <CardBody>
