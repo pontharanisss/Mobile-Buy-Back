@@ -5,7 +5,7 @@ import { ChevronDown } from 'react-feather'
 import DataTable from 'react-data-table-component'
 import Select from 'react-select'
 // ** Reactstrap Imports
-import { Button, Row, Col, Card, Label, Input } from 'reactstrap'
+import { Button, Row, Col, Card, Label, Input, CardBody } from 'reactstrap'
 import UILoader from '@components/ui-loader'
 // ** Styles
 import '@styles/react/apps/app-invoice.scss'
@@ -104,7 +104,7 @@ const Stock = () => {
   ])
   const [currentPage] = useState(1)
 
-  const handleFilter = e => {
+  const handleFilter = (e) => {
     const value = e.target.value
     setSearchValue(value)
   }
@@ -268,7 +268,7 @@ const Stock = () => {
                   locationValue={locationValue}
                   statusValue={statusValue}
                   searchValue= {searchValue}
-                  handleFilter={(val) => handleFilter(val)}
+                  handleFilter={(e) => handleFilter(e)}
                   handlePerPage={(e) => handlePerPage(e)}
                   handleStatusValue={(e) => handleStatusValue(e)}
                   handleBrandValue={(e) => handleBrandValue(e)}
