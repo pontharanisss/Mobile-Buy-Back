@@ -11,7 +11,8 @@ import Flatpickr from 'react-flatpickr'
 import Select from 'react-select'
 
 // ** Reactstrap Imports
-import { Row, Col, Card, Form, Input, Label, Button, CardBody, CardText, InputGroup, InputGroupText, UncontrolledTooltip } from 'reactstrap'
+import { Row, Col, Card, Form, Input, Label, Button, CardBody, CardText, InputGroup, InputGroupText, UncontrolledTooltip,
+  Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import DataTable from 'react-data-table-component'
 
 // ** Styles
@@ -33,8 +34,11 @@ const AddInvoice = () => {
   const [productName, setProductName] = useState('')
   const [salesAmount, setSalesAmount] = useState('')
   const [totalAmount, setTotalAmount] = useState(0)
+  const [salesDeleteModal, setSalesDeleteModal] = useState(false)
+  const [deleteImeiNumber, setDeleteImeiNumber] = useState('')
+
   //Delete Local Array
-  const deleteImeiNumber = index => {
+  const ondeleteImeiNumber = index => {
     console.log(index)
     const arr_data = Object.assign([], invoiceList)    
     if (index !== -1) {
@@ -46,6 +50,12 @@ const AddInvoice = () => {
       amount += arr_data[i].sales_amount  //Do the math!
     }
     setTotalAmount(amount)
+    setSalesDeleteModal(false)
+  }
+
+  const deleteConfirmation = (index) => {
+    setDeleteImeiNumber(index)
+    setSalesDeleteModal(!salesDeleteModal)
   }
 
   const columns = [ 
@@ -118,7 +128,7 @@ const AddInvoice = () => {
       minWidth: '110px',
       cell: (row, index) => (
         <div className='column-action d-flex align-items-center'>          
-          <Trash size={14} className='me-50' id={`delete-tooltip-${index}`}  onClick={() => deleteImeiNumber(index)}/>
+          <Trash size={14} className='me-50' id={`delete-tooltip-${index}`}  onClick={() => deleteConfirmation()}/>
           <UncontrolledTooltip placement='top' target={`delete-tooltip-${index}`}>
             Delete
         </UncontrolledTooltip>
@@ -387,6 +397,26 @@ const AddInvoice = () => {
       </Card>      
     </Col>
       </Row>
+
+      <Modal isOpen={salesDeleteModal} toggle={() => setSalesDeleteModal(!salesDeleteModal)} 
+        className='vertically-centered-modal' fade={false}>
+          <ModalHeader toggle={() => setSalesDeleteModal(!salesDeleteModal)}>Confirmation</ModalHeader>
+          <ModalBody>
+            <div className='mb-2'>
+              <Label className='form-label' for='email'>
+                Are you sure you want to delete ? 
+              </Label>
+            </div>            
+          </ModalBody>
+          <ModalFooter>
+            <Button color='primary' onClick={() => ondeleteImeiNumber(deleteImeiNumber)}>
+              Yes
+            </Button>{' '}
+            <Button color='primary' outline onClick={() => setSalesDeleteModal(false)}>
+              No
+            </Button>{' '}
+          </ModalFooter>
+        </Modal>
     </div>
   )
 }

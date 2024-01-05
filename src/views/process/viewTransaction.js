@@ -1,7 +1,7 @@
 // ** React Imports
 import React, { useState, useEffect  } from 'react'
 import {
-  Card, CardHeader, CardTitle, CardBody, UncontrolledTooltip, Input, Button, Row, Col, Modal, ModalHeader, ModalBody, ModalFooter, Label 
+  Card, CardHeader, CardTitle, CardBody, Row, Col, Label, Badge
 } from 'reactstrap'
 import { ChevronDown, Trash  } from 'react-feather'
 import DataTable from 'react-data-table-component'
@@ -19,7 +19,7 @@ const TransactionDetails = () => {
   // }
 
   const getCancelledProducts = () => {
-    setCancelledProducts([{ id: '1', imei_no: '3539061123213123', product_name: 'iPhone 11 Pro', brand: 'Apple', reason: 'Speak Damage', purchase_amount: '100000', servify_amount: '5000', vat_amount: '200' }, { id: '1', imei_no: '3539061123213145', product_name: 'Nokia RT 800 ', brand: 'Nokia', reason: 'Old Model', purchase_amount: '50000', servify_amount: '2000 ', vat_amount: '100' }, { id: '1', imei_no: '4984061123213123', product_name: 'Redmi 8A Dual', brand: 'MI', reason: 'Over Heating', purchase_amount: '20000 ', servify_amount: '1000', vat_amount: '200' }, { id: '1', imei_no: '8722161123213123', product_name: 'Samsung Galaxy 2', brand: 'Samsung', reason: 'Display not good', purchase_amount: '10000', servify_amount: '3000', vat_amount: '300' }, { id: '1', imei_no: '351906112321343', product_name: 'OPPO V 8', brand: 'OPPO', reason: 'Headset damage', purchase_amount: '40000', servify_amount: '4000', vat_amount: '503' }])
+    setCancelledProducts([{ id: '1', imei_no: '3539061123213123', product_name: 'iPhone 11 Pro', brand: 'Apple', reason: 'Speak Damage', purchase_amount: '100000', status: 'Pending', servify_amount: '5000', vat_amount: '200' }, { id: '1', imei_no: '3539061123213145', product_name: 'Nokia RT 800 ', brand: 'Nokia', reason: 'Old Model', purchase_amount: '50000', servify_amount: '2000 ', vat_amount: '100', status: 'Sold' }, { id: '1', imei_no: '4984061123213123', product_name: 'Redmi 8A Dual', brand: 'MI', reason: 'Over Heating', purchase_amount: '20000 ', servify_amount: '1000', vat_amount: '200', status: 'Sold' }, { id: '1', imei_no: '8722161123213123', product_name: 'Samsung Galaxy 2', brand: 'Samsung', reason: 'Display not good', purchase_amount: '10000', servify_amount: '3000', vat_amount: '300', status: 'Cancelled' }, { id: '1', imei_no: '351906112321343', product_name: 'OPPO V 8', brand: 'OPPO', reason: 'Headset damage', purchase_amount: '40000', servify_amount: '4000', vat_amount: '503', status: 'Pending' }])
   }
 
   useEffect(() => {
@@ -50,6 +50,12 @@ const TransactionDetails = () => {
         return (
           <div className='justify-content-left align-items-center paddingtop-1'>
             <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{'#'}{row.imei_no}</h6>
+            {row.status === 'Sold' && 
+              <Label><Badge color='success' className='user-name text-truncate mb-0'>{row.status}</Badge></Label>
+            }
+            {row.status === 'Cancelled' && 
+              <Label><Badge color='danger' className='user-name text-truncate mb-0'>{row.status}</Badge></Label>
+            }                       
           </div>
 
         )
