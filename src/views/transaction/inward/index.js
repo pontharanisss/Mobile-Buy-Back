@@ -6,6 +6,7 @@ import { ChevronDown, Calendar, Eye } from 'react-feather'
 import DataTable from 'react-data-table-component'
 // ** Reactstrap Imports
 import '../../../assets/style/style.css'
+import "./inward_css.scss"
 // ** Reactstrap Imports
 import {
   Row,
@@ -14,6 +15,146 @@ import {
 // ** Styles
 import '@styles/react/apps/app-invoice.scss'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
+
+const TotalRecordsCard = ({ totalRecords }) => {
+  return (
+    <div className="col-sm-6 col-lg-3 card_box_head total_record">
+      <CardBody>
+        <div className="d-flex justify-content-between align-items-center">
+          <div>
+            <h2 className="fw-bolder mb-0">{totalRecords}</h2>
+            <p className="card-text">Total Products</p>
+          </div>
+          <div style={{ marginLeft: "20px" }} className="avatar avatar-stats p-50 bg-light-primary">
+            <div className="avatar-content">
+              <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                <rect x="9" y="9" width="6" height="6"></rect>
+                <line x1="9" y1="1" x2="9" y2="4"></line>
+                <line x1="15" y1="1" x2="15" y2="4"></line>
+                <line x1="9" y1="20" x2="9" y2="23"></line>
+                <line x1="15" y1="20" x2="15" y2="23"></line>
+                <line x1="20" y1="9" x2="23" y2="9"></line>
+                <line x1="20" y1="14" x2="23" y2="14"></line>
+                <line x1="1" y1="9" x2="4" y2="9"></line>
+                <line x1="1" y1="14" x2="4" y2="14"></line>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </CardBody>
+    </div>
+  )
+}
+
+const CardPurchase = ({ totalRecords }) => {
+  return (
+    <div className="col-sm-6 col-lg-3 card_box_head total_purchase">
+      <CardBody>
+        <div className="d-flex justify-content-between align-items-center">
+          <div>
+            <h2 className="fw-bolder mb-0">{totalRecords}</h2>
+            <p className="card-text">Total Purchase</p>
+          </div>
+          <div style={{ marginLeft: "20px" }} className="avatar avatar-stats p-50 bg-light-primary">
+            <div className="avatar-content">
+              <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                <rect x="9" y="9" width="6" height="6"></rect>
+                <line x1="9" y1="1" x2="9" y2="4"></line>
+                <line x1="15" y1="1" x2="15" y2="4"></line>
+                <line x1="9" y1="20" x2="9" y2="23"></line>
+                <line x1="15" y1="20" x2="15" y2="23"></line>
+                <line x1="20" y1="9" x2="23" y2="9"></line>
+                <line x1="20" y1="14" x2="23" y2="14"></line>
+                <line x1="1" y1="9" x2="4" y2="9"></line>
+                <line x1="1" y1="14" x2="4" y2="14"></line>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </CardBody>
+    </div>
+  )
+}
+
+const CardTax = ({ totalRecords }) => {
+  return (
+    <div className="col-sm-6 col-lg-3 card_box_head total_tax">
+      <CardBody>
+        <div className="d-flex justify-content-between align-items-center">
+          <div>
+            <h2 className="fw-bolder mb-0">{totalRecords}</h2>
+            <p className="card-text">Total Tax</p>
+          </div>
+          <div style={{ marginLeft: "20px" }} className="avatar avatar-stats p-50 bg-light-primary">
+            <div className="avatar-content">
+              <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                <rect x="9" y="9" width="6" height="6"></rect>
+                <line x1="9" y1="1" x2="9" y2="4"></line>
+                <line x1="15" y1="1" x2="15" y2="4"></line>
+                <line x1="9" y1="20" x2="9" y2="23"></line>
+                <line x1="15" y1="20" x2="15" y2="23"></line>
+                <line x1="20" y1="9" x2="23" y2="9"></line>
+                <line x1="20" y1="14" x2="23" y2="14"></line>
+                <line x1="1" y1="9" x2="4" y2="9"></line>
+                <line x1="1" y1="14" x2="4" y2="14"></line>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </CardBody>
+    </div>
+  )
+}
+
+const CardSales = ({ totalRecords }) => {
+  return (
+    <div className="col-sm-6 col-lg-3 card_box_head total_sales">
+      <CardBody>
+        <div className="d-flex justify-content-between align-items-center">
+          <div>
+            <h2 className="fw-bolder mb-0">{totalRecords}</h2>
+            <p className="card-text">Total Sales</p>
+          </div>
+          <div style={{ marginLeft: "20px" }} className="avatar avatar-stats p-50 bg-light-primary">
+            <div className="avatar-content">
+              <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                <rect x="9" y="9" width="6" height="6"></rect>
+                <line x1="9" y1="1" x2="9" y2="4"></line>
+                <line x1="15" y1="1" x2="15" y2="4"></line>
+                <line x1="9" y1="20" x2="9" y2="23"></line>
+                <line x1="15" y1="20" x2="15" y2="23"></line>
+                <line x1="20" y1="9" x2="23" y2="9"></line>
+                <line x1="20" y1="14" x2="23" y2="14"></line>
+                <line x1="1" y1="9" x2="4" y2="9"></line>
+                <line x1="1" y1="14" x2="4" y2="14"></line>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </CardBody>
+    </div>
+  )
+}
+
+const CustomHeader = ({  totalRecords, totalPurchase, totalTax, totalSales }) => {
+  return (
+    <div className="invoice-list-table-header w-100">
+      <Row className="mb-0">
+        <Col  className="d-flex align-items-center ml-auto">
+          <TotalRecordsCard totalRecords={totalRecords} />
+          <CardPurchase totalRecords={totalPurchase} />
+          <CardTax totalRecords={totalTax} />
+          <CardSales totalRecords={totalSales} />
+        </Col>
+
+      </Row>
+    </div>
+  )
+}
 
 const Inward = () => {
   // ** Store vars
@@ -79,7 +220,7 @@ const Inward = () => {
     {
       name: 'IMEI No.',
       sortable: true,
-      minWidth: '200px',
+      minWidth: '160px',
       id: 'imei_no',
       selector: row => row.id,
       cell: row => {
@@ -96,7 +237,7 @@ const Inward = () => {
     {
       name: 'Product Name',
       sortable: true,
-      minWidth: '200px',
+      minWidth: '180px',
       id: 'product_name',
       selector: row => row.product_name,
       // selector: row => row.client.name,
@@ -109,25 +250,25 @@ const Inward = () => {
         )
       }
     },
+    // {
+    //   name: 'Brand',
+    //   sortable: true,
+    //   minWidth: '80px',
+    //   id: 'brand',
+    //   selector: row => row.brand,
+    //   cell: row => {
+    //     return (
+    //       <div className='justify-content-left align-items-center paddingtop-1'>
+    //         <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.brand}</h6>
+    //       </div>
+
+    //     )
+    //   }
+    // },
     {
-      name: 'Brand',
+      name: 'Pur Amt',
       sortable: true,
       minWidth: '100px',
-      id: 'brand',
-      selector: row => row.brand,
-      cell: row => {
-        return (
-          <div className='justify-content-left align-items-center paddingtop-1'>
-            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.brand}</h6>
-          </div>
-
-        )
-      }
-    },
-    {
-      name: 'Purchase Amount',
-      sortable: true,
-      minWidth: '200px',
       right: true,
       id: 'purchase_amount',
       selector: row => row.purchase_amount,
@@ -141,9 +282,57 @@ const Inward = () => {
       }
     },
     {
-      name: 'Sales Amount',
+      name: 'Servify Fee',
       sortable: true,
-      minWidth: '200px',
+      minWidth: '100px',
+      right: true,
+      id: 'service',
+      selector: row => row.service,
+      cell: row => {
+        return (
+          <div className='justify-content-right align-items-center paddingtop-1'>
+            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.service}</h6>
+          </div>
+
+        )
+      }
+    },
+    {
+      name: 'VAT',
+      sortable: true,
+      minWidth: '100px',
+      right: true,
+      id: 'vat',
+      selector: row => row.vat,
+      cell: row => {
+        return (
+          <div className='justify-content-right align-items-center paddingtop-1'>
+            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.vat}</h6>
+          </div>
+
+        )
+      }
+    },
+    {
+      name: 'Tot. Pur',
+      sortable: true,
+      minWidth: '100px',
+      right: true,
+      id: 'total',
+      selector: row => row.total,
+      cell: row => {
+        return (
+          <div className='justify-content-right align-items-center paddingtop-1'>
+            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.total}</h6>
+          </div>
+
+        )
+      }
+    },
+    {
+      name: 'Sales Amt',
+      sortable: true,
+      minWidth: '120px',
       id: 'sales_amount',
       selector: row => row.sales_amount,
       cell: (row, index) => {
@@ -160,7 +349,7 @@ const Inward = () => {
 
 
   const getInwardList = () => {
-    setInwardList([{ id: '1', imei_no: '353906104983912', product_name: 'iPhone 11 Pro Max', brand: 'Apple', purchase_amount: '100', sales_amount: 1, checked: false, read_only: true }, { id: '2', imei_no: '353906104983913', product_name: 'iPhone 13 Pro Max', brand: 'Apple', purchase_amount: '200000', sales_amount: 1, checked: false, read_only: true }])
+    setInwardList([{ id: '1', imei_no: '353906104983912', product_name: 'iPhone 11 Pro Max', brand: 'Apple', purchase_amount: '100', service: '20', vat: '10', total: '130', sales_amount: 1, checked: false, read_only: true }, { id: '2', imei_no: '353906104983913', product_name: 'iPhone 13 Pro Max', brand: 'Apple', purchase_amount: '200000', service: '20', vat: '10', total: '20030', sales_amount: 1, checked: false, read_only: true }])
   }
 
   const handleFilter = e => {
@@ -177,8 +366,11 @@ const Inward = () => {
 
 
       <Card>
-        <CardHeader className='border-bottom'>
+        <CardHeader className='border-bottom' style={{justifyContent:"flex-start"}}>
           <CardTitle tag='h4'>Inward</CardTitle>
+          <div className="row datatable-header header">
+            <CustomHeader totalRecords={100} totalPurchase={'20,000'} totalTax={'1,000'} totalSales={'30,0000'} />
+          </div>
         </CardHeader>
         <CardBody>
           <Row className='justify-content-end mx-0'>
