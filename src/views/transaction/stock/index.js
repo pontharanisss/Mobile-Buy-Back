@@ -5,13 +5,13 @@ import { ChevronDown } from 'react-feather'
 import DataTable from 'react-data-table-component'
 import Select from 'react-select'
 // ** Reactstrap Imports
-import { Button, Row, Col, Card, Label, Input, CardBody } from 'reactstrap'
+import { Button, Row, Col, Card, Label, Input, CardBody, Badge } from 'reactstrap'
 import UILoader from '@components/ui-loader'
 // ** Styles
 import '@styles/react/apps/app-invoice.scss'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 
-const CustomHeader = ({ brandValue, locationValue, statusValue, totalRecords, searchValue, handleStatusValue, handleBrandValue, handleLocationValue,  showItemPopup, brandMasterList, locationMasterList, statusMasterList, handleFilter }) => {
+const CustomHeader = ({ brandValue, locationValue, statusValue, searchValue, handleStatusValue, handleBrandValue, handleLocationValue,  showItemPopup, brandMasterList, locationMasterList, statusMasterList, handleFilter }) => {
   return (
     <div className='invoice-list-table-header w-100 py-2'>
       <Row className='pb-2 align-items-center'>
@@ -60,12 +60,12 @@ const CustomHeader = ({ brandValue, locationValue, statusValue, totalRecords, se
             </Button>
           </div>
         </Col>
+        {/* <Col md='4'>
+        <TotalRecordsCard totalRecords={totalRecords} />
+        </Col> */}
       </Row>
       
-      <Row className='justify-content-end mx-0'>
-      <Col md="4" className="d-flex align-items-center ml-auto">
-          <TotalRecordsCard totalRecords={totalRecords} />
-        </Col>
+      <Row className='justify-content-end mx-0'>     
         <Col className='d-flex align-items-center justify-content-end mt-1' md='6' sm='12'>
         <Label className='me-1' for='search-input'>
             Search
@@ -84,36 +84,36 @@ const CustomHeader = ({ brandValue, locationValue, statusValue, totalRecords, se
   )
 }
 
-const TotalRecordsCard = ({ totalRecords }) => {
-  return (
-    <div className="card_box">
-     <CardBody>
-        <div className="d-flex justify-content-between align-items-center">
-          <div>
-            <h2 className="fw-bolder mb-0">{totalRecords}</h2>
-            <p className="card-text">Total Purchase</p>
-          </div>
-          <div style={{ marginLeft: "20px" }} className="avatar avatar-stats p-50 bg-light-primary">
-            <div className="avatar-content">
-              <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
-                <rect x="9" y="9" width="6" height="6"></rect>
-                <line x1="9" y1="1" x2="9" y2="4"></line>
-                <line x1="15" y1="1" x2="15" y2="4"></line>
-                <line x1="9" y1="20" x2="9" y2="23"></line>
-                <line x1="15" y1="20" x2="15" y2="23"></line>
-                <line x1="20" y1="9" x2="23" y2="9"></line>
-                <line x1="20" y1="14" x2="23" y2="14"></line>
-                <line x1="1" y1="9" x2="4" y2="9"></line>
-                <line x1="1" y1="14" x2="4" y2="14"></line>
-              </svg>
-            </div>
-          </div>
-        </div>
-      </CardBody>
-    </div>
-  )
-}
+// const TotalRecordsCard = ({ totalRecords }) => {
+//   return (
+//     <div className="col-sm-6 col-lg-3 card_box_head total_record">
+//       <CardBody>
+//         <div className="d-flex justify-content-between align-items-center">
+//           <div>
+//             <h2 className="fw-bolder mb-0">{totalRecords}</h2>
+//             <p className="card-text">Total Products</p>
+//           </div>
+//           <div style={{ marginLeft: "20px" }} className="avatar avatar-stats p-50 bg-light-primary">
+//             <div className="avatar-content">
+//               <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+//                 <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+//                 <rect x="9" y="9" width="6" height="6"></rect>
+//                 <line x1="9" y1="1" x2="9" y2="4"></line>
+//                 <line x1="15" y1="1" x2="15" y2="4"></line>
+//                 <line x1="9" y1="20" x2="9" y2="23"></line>
+//                 <line x1="15" y1="20" x2="15" y2="23"></line>
+//                 <line x1="20" y1="9" x2="23" y2="9"></line>
+//                 <line x1="20" y1="14" x2="23" y2="14"></line>
+//                 <line x1="1" y1="9" x2="4" y2="9"></line>
+//                 <line x1="1" y1="14" x2="4" y2="14"></line>
+//               </svg>
+//             </div>
+//           </div>
+//         </div>
+//       </CardBody>
+//     </div>
+//   )
+// }
 
 const Stock = () => {
   const [brandValue, setBrandValue] = useState('')
@@ -179,12 +179,12 @@ const Stock = () => {
     await setLocationMasterList(locationMasterList)
     await setStatusMasterList(statusMasterList)
     await setResult([
-      { id: '1', customer_name: '12267556542', payment_type: 'samsung', receipt_amount: '15000', Service_no:'673647832', VAT_type:'637.3', Sales_type:'Trade-in', Stock_type:'45'},
-      { id: '2', customer_name: '83926821345', payment_type: 'iphone', receipt_amount: '67000', Service_no:'9898922', VAT_type:'3462.1', Sales_type:'Trade-in', Stock_type:'12' },
-      { id: '3', customer_name: '87927762343', payment_type: 'one plus', receipt_amount: '72000', Service_no:'93786291', VAT_type:'578', Sales_type:'Trade-in', Stock_type:'72' },
-      { id: '4', customer_name: '34519034511', payment_type: 'Redmi', receipt_amount: '9000', Service_no:'753527638', VAT_type:'462', Sales_type:'Trade-in', Stock_type:'29' },
-      { id: '5', customer_name: '975263402490', payment_type: 'Xioami', receipt_amount: '10000', Service_no:'67263786274', VAT_type:'873.5', Sales_type:'Trade-in', Stock_type:'31'},
-      { id: '6', customer_name: '378786829793', payment_type: 'techno', receipt_amount: '6000', Service_no:'4652373678', VAT_type:'4662', Sales_type:'Trade-in', Stock_type:'53'}
+      { id: '1', customer_name: '12267556542', payment_type: 'samsung', receipt_amount: '15000', Service_no:'673647832', VAT_type:'637.3', Sales_type:'Trade-in', Stock_type:'45', status: ''},
+      { id: '2', customer_name: '83926821345', payment_type: 'iphone', receipt_amount: '67000', Service_no:'9898922', VAT_type:'3462.1', Sales_type:'Trade-in', Stock_type:'12', status: 'Cancelled' },
+      { id: '3', customer_name: '87927762343', payment_type: 'one plus', receipt_amount: '72000', Service_no:'93786291', VAT_type:'578', Sales_type:'Trade-in', Stock_type:'72', status: '' },
+      { id: '4', customer_name: '34519034511', payment_type: 'Redmi', receipt_amount: '9000', Service_no:'753527638', VAT_type:'462', Sales_type:'Trade-in', Stock_type:'29', status: 'Cancelled' },
+      { id: '5', customer_name: '975263402490', payment_type: 'Xioami', receipt_amount: '10000', Service_no:'67263786274', VAT_type:'873.5', Sales_type:'Trade-in', Stock_type:'31', status: ''},
+      { id: '6', customer_name: '378786829793', payment_type: 'techno', receipt_amount: '6000', Service_no:'4652373678', VAT_type:'4662', Sales_type:'Trade-in', Stock_type:'53', status: ''}
     ])
   }, [])
 
@@ -207,8 +207,14 @@ const Stock = () => {
       minWidth: '300px',
       selector: 'customer_name',
       cell: (row) => (
-        <div className='justify-content-left paddingtop-1'>
+        <div className='justify-content-left' style={{paddingTop: '1%'}}>
           <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.customer_name}</h6>
+            {row.status === 'Sold' && 
+              <Label><Badge color='success' className='user-name text-truncate'>{row.status}</Badge></Label>
+            }
+            {row.status === 'Cancelled' && 
+              <Label><Badge color='danger' className='user-name text-truncate'>{row.status}</Badge></Label>
+            }  
         </div>
       )
     },
