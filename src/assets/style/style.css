@@ -217,3 +217,43 @@ th, td {
 .bold{
   font-weight: 900 !important;
 }
+
+.imei_css {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.imei_details_label {
+  font-size: 17px;
+}
+
+.font-16 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.floatcss {
+  position: fixed;
+  top: 300px;
+  right: 40px;
+  background-color: #0C9;
+  color: #FFF;
+  text-align: center;
+  box-shadow: 2px 2px 3px #999;
+}
+
+.sticky {
+  position: fixed;
+  /* top: 0; */
+  background: #fff;
+  width: 78.3%;
+  z-index: 999;
+  
+}
+
+table, th, td {
+  border: none;
+}
+th, td {
+  padding: 2px; 
+}
