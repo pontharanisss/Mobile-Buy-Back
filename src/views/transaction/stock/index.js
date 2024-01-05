@@ -11,7 +11,7 @@ import UILoader from '@components/ui-loader'
 import '@styles/react/apps/app-invoice.scss'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 
-const CustomHeader = ({ brandValue, locationValue, statusValue, searchValue, handleStatusValue, handleBrandValue, handleLocationValue,  showItemPopup, brandMasterList, locationMasterList, statusMasterList }) => {
+const CustomHeader = ({ brandValue, locationValue, statusValue, totalRecords, searchValue, handleStatusValue, handleBrandValue, handleLocationValue,  showItemPopup, brandMasterList, locationMasterList, statusMasterList, handleFilter }) => {
   return (
     <div className='invoice-list-table-header w-100 py-2'>
       <Row className='pb-2 align-items-center'>
@@ -61,9 +61,13 @@ const CustomHeader = ({ brandValue, locationValue, statusValue, searchValue, han
           </div>
         </Col>
       </Row>
+      
       <Row className='justify-content-end mx-0'>
+      <Col md="4" className="d-flex align-items-center ml-auto">
+          <TotalRecordsCard totalRecords={totalRecords} />
+        </Col>
         <Col className='d-flex align-items-center justify-content-end mt-1' md='6' sm='12'>
-          <Label className='me-1' for='search-input'>
+        <Label className='me-1' for='search-input'>
             Search
           </Label>
           <Input style={{ maxWidth:"258px"}}
@@ -76,6 +80,37 @@ const CustomHeader = ({ brandValue, locationValue, statusValue, searchValue, han
           />
         </Col>
       </Row>
+    </div>
+  )
+}
+
+const TotalRecordsCard = ({ totalRecords }) => {
+  return (
+    <div className="card_box">
+     <CardBody>
+        <div className="d-flex justify-content-between align-items-center">
+          <div>
+            <h2 className="fw-bolder mb-0">{totalRecords}</h2>
+            <p className="card-text">Total Purchase</p>
+          </div>
+          <div style={{ marginLeft: "20px" }} className="avatar avatar-stats p-50 bg-light-primary">
+            <div className="avatar-content">
+              <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                <rect x="9" y="9" width="6" height="6"></rect>
+                <line x1="9" y1="1" x2="9" y2="4"></line>
+                <line x1="15" y1="1" x2="15" y2="4"></line>
+                <line x1="9" y1="20" x2="9" y2="23"></line>
+                <line x1="15" y1="20" x2="15" y2="23"></line>
+                <line x1="20" y1="9" x2="23" y2="9"></line>
+                <line x1="20" y1="14" x2="23" y2="14"></line>
+                <line x1="1" y1="9" x2="4" y2="9"></line>
+                <line x1="1" y1="14" x2="4" y2="14"></line>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </CardBody>
     </div>
   )
 }
