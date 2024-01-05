@@ -17,7 +17,7 @@ const ProductCancel = () => {
   const [imei_number, setIMEI_NUMBER] = useState({})
   const [productCancelModal, setProductCancelModal] = useState(false)
   const [reason, setReason] = useState('')
-
+  const [deleteModal, setDeleteModal] = useState(false)
   // const viewSales = () => {
   //   navigate('/transaction/sales/add')
   // }
@@ -163,7 +163,7 @@ const ProductCancel = () => {
       minWidth: '110px',
       cell: (row, index) => (
         <div className='column-action d-flex align-items-center'>          
-          <Trash size={14} className='me-50' id={`delete-tooltip-${index}`} />
+          <Trash size={14} className='me-50' id={`delete-tooltip-${index}`} onClick={() => setDeleteModal(true)}/>
           <UncontrolledTooltip placement='top' target={`delete-tooltip-${index}`}>
             Delete
         </UncontrolledTooltip>
@@ -330,6 +330,27 @@ const ProductCancel = () => {
           </Button>{' '}
         </ModalFooter>
       </Modal>
+
+
+      <Modal isOpen={deleteModal} toggle={() => setDeleteModal(!deleteModal)} 
+        className='vertically-centered-modal' fade={false}>
+          <ModalHeader toggle={() => setDeleteModal(!deleteModal)}>Confirmation</ModalHeader>
+          <ModalBody>
+            <div className='mb-2'>
+              <Label className='form-label' for='email'>
+                Are you sure you want to delete ? 
+              </Label>
+            </div>            
+          </ModalBody>
+          <ModalFooter>
+            <Button color='primary' onClick={() => setDeleteModal(false)}>
+              Yes
+            </Button>{' '}
+            <Button color='primary' outline onClick={() => setDeleteModal(false)}>
+              No
+            </Button>{' '}
+          </ModalFooter>
+        </Modal>
     </div>
   )
 }
