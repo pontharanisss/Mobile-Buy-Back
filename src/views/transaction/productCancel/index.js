@@ -8,6 +8,8 @@ import DataTable from 'react-data-table-component'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 import '@styles/base/pages/app-invoice.scss'
 import Select from 'react-select'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 
 const ProductCancel = () => {
   // ** Store vars
@@ -18,13 +20,29 @@ const ProductCancel = () => {
   const [productCancelModal, setProductCancelModal] = useState(false)
   const [reason, setReason] = useState('')
   const [deleteModal, setDeleteModal] = useState(false)
+  const [selectedReason, setSelectedReason] = useState('')
+  const [fromDate, setFromDate] = useState(null)
+  const [toDate, setToDate] = useState(null)
   // const viewSales = () => {
   //   navigate('/transaction/sales/add')
   // }
 
   const getCancelledProducts = () => {
-    setCancelledProducts([{ id: '1', imei_no: '3539061123213123', product_name: 'iPhone 11 Pro', brand: 'Apple', reason: 'Speak Damage', purchase_amount: '100000', servify_amount: '5000', vat_amount: '200' }, { id: '1', imei_no: '3539061123213145', product_name: 'Nokia RT 800 ', brand: 'Nokia', reason: 'Old Model', purchase_amount: '50000', servify_amount: '2000 ', vat_amount: '100' }, { id: '1', imei_no: '4984061123213123', product_name: 'Redmi 8A Dual', brand: 'MI', reason: 'Over Heating', purchase_amount: '20000 ', servify_amount: '1000', vat_amount: '200' }, { id: '1', imei_no: '8722161123213123', product_name: 'Samsung Galaxy 2', brand: 'Samsung', reason: 'Display not good', purchase_amount: '10000', servify_amount: '3000', vat_amount: '300' }, { id: '1', imei_no: '351906112321343', product_name: 'OPPO V 8', brand: 'OPPO', reason: 'Headset damage', purchase_amount: '40000', servify_amount: '4000', vat_amount: '503' }])
-    setProductList([{ id: '1', imei_no: '4532612121212121', product_name: 'APPLE 11 Pro', brand: 'Apple', purchase_amount: '100000', servify_amount: '5000', vat_amount: '200' }, { id: '1', imei_no: '6534343434343421', product_name: 'Nokia RT 800 ', brand: 'Nokia', purchase_amount: '50000', servify_amount: '2000 ', vat_amount: '100' }, { id: '1', imei_no: '554323213213121', product_name: 'Redmi 8A Dual', brand: 'MI', reason: 'Over Heating', purchase_amount: '20000 ', servify_amount: '1000', vat_amount: '200' }, { id: '1', imei_no: '453222311212121', product_name: 'Samsung Galaxy 2', brand: 'Samsung', reason: 'Display not good', purchase_amount: '10000', servify_amount: '3000', vat_amount: '300' }, { id: '1', imei_no: '65756756756756', product_name: 'OPPO V 8', brand: 'OPPO', reason: 'Headset damage', purchase_amount: '40000', servify_amount: '4000', vat_amount: '503' }])
+    setCancelledProducts([
+      { id: '1', imei_no: '3539061123213123', product_name: 'iPhone 11 Pro', brand: 'Apple', reason: 'Loss', purchase_amount: '100000', servify_amount: '5000', vat_amount: '200', details: 'damage', reasons: 'Display not working', user:'#001', date:'01/12/2024', time:'11:24AM' },
+      { id: '2', imei_no: '3539061123213145', product_name: 'Nokia RT 800 ', brand: 'Nokia', reason: 'Loss', purchase_amount: '50000', servify_amount: '2000 ', vat_amount: '100', details: 'loss', reasons:  'Fault in screen', user:'#002', date:'01/12/2024',  time:'1:24PM' },
+      { id: '3', imei_no: '4984061123213123', product_name: 'Redmi 8A Dual', brand: 'MI', reason: 'Loss', purchase_amount: '20000 ', servify_amount: '1000', vat_amount: '200', details: 'damage', reasons: 'Over hanging', user:'#003', date:'01/12/2024',  time:'5:00PM'  },
+      { id: '4', imei_no: '8722161123213123', product_name: 'Samsung Galaxy 2', brand: 'Samsung', reason: 'Loss', purchase_amount: '10000', servify_amount: '3000', vat_amount: '300', details: 'loss', reasons: 'Not working', user:'#004', date:'01/12/2024',  time:'1:24AM'  },
+      { id: '5', imei_no: '351906112321343', product_name: 'OPPO V 8', brand: 'OPPO', reason: 'Loss', purchase_amount: '40000', servify_amount: '4000', vat_amount: '503', details: 'damage', reasons: 'Display bug', user:'#005', date:'01/12/2024',  time:'11:48PM' }
+    ])
+
+    setProductList([
+      { id: '1', imei_no: '4532612121212121', product_name: 'APPLE 11 Pro', brand: 'Apple', purchase_amount: '100000', servify_amount: '5000', vat_amount: '200' },
+      { id: '2', imei_no: '6534343434343421', product_name: 'Nokia RT 800 ', brand: 'Nokia', purchase_amount: '50000', servify_amount: '2000 ', vat_amount: '100' },
+      { id: '3', imei_no: '554323213213121', product_name: 'Redmi 8A Dual', brand: 'MI', purchase_amount: '20000 ', servify_amount: '1000', vat_amount: '200' },
+      { id: '4', imei_no: '453222311212121', product_name: 'Samsung Galaxy 2', brand: 'Samsung', purchase_amount: '10000', servify_amount: '3000', vat_amount: '300' },
+      { id: '5', imei_no: '65756756756756', product_name: 'OPPO V 8', brand: 'OPPO', purchase_amount: '40000', servify_amount: '4000', vat_amount: '503' }
+    ])
   }
 
   useEffect(() => {
@@ -32,6 +50,7 @@ const ProductCancel = () => {
   }, [])
 
   const imei_numbers = [{label: '4532612121212121', value: '4532612121212121'}, {label: '6534343434343421', value: '6534343434343421'}, {label: '554323213213121', value: '554323213213121'}, {label: '453222311212121', value: '453222311212121'}, {label: '65756756756756', value: '65756756756756'}]
+  const Reasons = [{label: 'Lost', value: 'lost'}, {label: 'damage', value: 'damage'}]
   const columns = [ 
     {
       name: 'S.No.',
@@ -69,48 +88,60 @@ const ProductCancel = () => {
       selector: row => row.id,
       cell: row => {
         return (
-          <div className='justify-content-left align-items-center paddingtop-1'>
-            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.product_name}</h6>
+          <div className='d-flex flex-column align-items-start paddingtop-1'>
+            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>
+              {row.product_name}
+            </h6>
+            <span className='brand-name' style={{ fontSize: '10px' }}>
+              {row.brand}
+            </span>
           </div>
-
         )
       }
     },
-
-  
     {
-      name: 'Brand',
-      sortable: true,
-      minWidth: '100px',
-      id: 'brand',
-      selector: row => row.brand,
-      // selector: row => row.client.name,
-      cell: row => {
-        return (
-          <div className='justify-content-left  paddingtop-1'>
-            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.brand}</h6>
-          </div>
-
-        )
-      }
-    }, 
-    {
-      name: 'Reason',
+      name: 'Reasons',
       sortable: true,
       minWidth: '200px',
-      center: true.valueOf,
       id: 'reason',
-      selector: row => row.reason,
-      cell: row => {
+      selector: (row) => row.reason,
+      cell: (row) => {
         return (
-          <div className='justify-content-left align-items-center paddingtop-1'>
-            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.reason}</h6>
-          </div>          
+          <div className='d-flex flex-column align-items-start paddingtop-1'>
+            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>
+              <span>{row.reasons}</span>
+              {row.details && (
+                <>
+                  <br />
+                  <small style={{ fontSize: '10px', textAlign: 'left' }}>{row.details}</small>
+                </>
+              )}
+            </h6>
+          </div>
         )
       }
-    }, 
+    },
     {
-      name: 'Purchase Amount',
+      name: 'User id',
+      sortable: true,
+      minWidth: '200px',
+      id: 'purchase_amount',
+      selector: (row) => row.user,
+      cell: (row) => {
+        return (
+          <div className='d-flex flex-column align-items-start paddingtop-1'>
+            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.user}</h6>
+            <div className='d-flex justify-content-center align-items-center w-100'>
+              <span className='brand-name' style={{ fontSize: '10px', textAlign: 'center' }}>
+                {row.date} &nbsp; {row.time}
+              </span>
+            </div>
+          </div>
+        )
+      }
+    },
+    {
+      name: 'Total Amount',
       sortable: true,
       minWidth: '200px',
       right:true,
@@ -125,39 +156,6 @@ const ProductCancel = () => {
         )
       }
     },   
-    {
-      name: 'Servify Fee',
-      sortable: true,
-      right:true,
-      minWidth: '200px',
-      id: 'servify_fee',
-      selector: row => row.servify_amount,
-      cell: row => {
-        return (
-          <div className='justify-content-right align-items-center paddingtop-1'>
-            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.servify_amount}</h6>
-          </div>
-
-        )
-      }
-    },   
-    {
-      name: 'VAT',
-      sortable: true,
-      minWidth: '200px',
-      right:true,
-      id: 'purchase_amount',
-      selector: row => row.vat_amount,
-      cell: row => {
-        return (
-          <div className='justify-content-right align-items-center paddingtop-1'>
-            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.vat_amount}</h6>
-          </div>
-
-        )
-      }
-    },
-    
     {
       name: 'Action',
       minWidth: '110px',
@@ -198,6 +196,11 @@ const ProductCancel = () => {
     setIMEI_NUMBER(selImei_no)
   }
 
+  const onChangereasons = (data) => {
+    setSelectedReason(data)
+  }
+
+  
   return (
     <div className="invoice-list-wrapper">
       <Card>
@@ -205,42 +208,62 @@ const ProductCancel = () => {
           <CardTitle tag='h4'>Cancelled Products</CardTitle>
         </CardHeader>
         <CardBody>
-        <div className='invoice-list-table-header w-100 py-2'>
-          <Row>
-            <Col lg='6' className='d-flex align-items-center px-0 px-lg-1'>
-              <div className='d-flex align-items-center me-2'>
-                <label htmlFor='rows-per-page'>Show</label>
-                <Input
-                  type='select'
-                  id='rows-per-page'
-                  // value={rowsPerPage}
-                  // onChange={handlePerPage}
-                  className='form-control ms-50 pe-3'
-                >
-                  <option value='10'>10</option>
-                  <option value='25'>25</option>
-                  <option value='50'>50</option>
-                </Input>
-              </div>
-              <Button onClick={() => AddCancelProduct()} color='primary'>
-                Add
-              </Button>
-            </Col>  
-            <Col lg='6'className='actions-right d-flex align-items-center justify-content-lg-end flex-lg-nowrap flex-wrap mt-lg-0 mt-1 pe-lg-1 p-0'>
-            <div className='d-flex align-items-center'>
-              <label htmlFor='search-invoice'>Search</label>
-              <Input
-                id='search-invoice'
-                className='ms-50 me-2 w-100'
-                type='text'
-                // value={value}
-                // onChange={e => handleFilter(e.target.value)}
-                placeholder='Search'
-              />
-            </div>          
-          </Col>          
-          </Row>
-        </div>
+          <div className='invoice-list-table-header w-100 py-2'>
+            <Row className='align-items-center'>
+              <Col lg='2'>
+                <div className='d-flex align-items-center me-2'>
+                  <label htmlFor='rows-per-page'>Show</label>
+                  <Input
+                    type='select'
+                    id='rows-per-page'
+                    className='form-control ms-2 pe-3'
+                    style={{ width: '80px' }} // Adjusted width
+                  >
+                    <option value='10'>10</option>
+                    <option value='25'>25</option>
+                    <option value='50'>50</option>
+                  </Input>
+                </div>
+              </Col>
+              <Col lg='3'>
+                <div className='d-flex align-items-center me-2'>
+                  <Label className='form-label'>From</Label>
+                  <DatePicker
+                    selected={fromDate}
+                    onChange={(date) => setFromDate(date)}
+                    className='form-control'
+                  />
+                </div>
+              </Col>
+              <Col lg='2'>
+                <div className='d-flex align-items-center me-2'>
+                  <Label className='form-label'>To</Label>
+                  <DatePicker
+                    selected={toDate}
+                    onChange={(date) => setToDate(date)}
+                    className='form-control'
+                  />
+                </div>
+              </Col>
+              <Col lg='3'>
+                <div className='d-flex align-items-center me-2 justify-content-end'> {/* Adjusted alignment */}
+                  <label htmlFor='search-invoice'>Search</label>
+                  <Input
+                    id='search-invoice'
+                    className='ms-2 me-2 w-100'
+                    type='text'
+                    placeholder='Search'
+                    style={{ width: '150px' }} 
+                  />
+                </div>
+              </Col>
+              <Col lg='2' className='text-end'> {/* Adjusted alignment */}
+                <Button onClick={() => AddCancelProduct()} color='primary'>
+                  Add
+                </Button>
+              </Col>
+            </Row>
+          </div>
         </CardBody>
         <CardBody className='invoice-padding' style={{paddingTop:'0px', paddingBottom:'3%'}}>
         <div className='sc-dmctIk fuLPYh react-dataTable'>
@@ -293,34 +316,37 @@ const ProductCancel = () => {
           </div>   
           <div className='mb-2'>
             <Label className='form-label' for='email'>
-              Purchase Amount
+            SKU Attributes
             </Label>            
             <Input type='text' readOnly maxLength={50}  autoComplete="off"  value={imei_number && imei_number.purchase_amount ? imei_number.purchase_amount : ''}
              />
           </div>  
           <div className='mb-2'>
             <Label className='form-label' for='email'>
-              Servify Fee
+              Total Amount
             </Label>            
             <Input type='text' readOnly  maxLength={50}  autoComplete="off"  value={imei_number && imei_number.servify_amount ? imei_number.servify_amount : ''}
              />
           </div>  
           <div className='mb-2'>
-            <Label className='form-label' for='email'>
-              VAT Amount
-            </Label>            
-            <Input type='text' readOnly maxLength={50}  autoComplete="off" value={imei_number && imei_number.vat_amount ? imei_number.vat_amount : ''}
-             />
-          </div>          
-          <div className='mb-2'>
+            <Label className='form-label required' for='email'>
+             Remarks
+            </Label>
+            <Select
+              isClearable={false}
+              options={Reasons}
+              className='react-select'
+              value={selectedReason}
+              onChange={(e) => onChangereasons(e)}
+            />
+          </div>
+            <div className='mb-2'>
             <Label className='form-label required' for='email'>
               Reason
             </Label>  
             <Input type='textarea' rows='3' id='reason' value={reason}  onChange={event => setReason(event.target.value)}/>          
-             
-          </div>         
-                   
-        </ModalBody>
+             </div>         
+  </ModalBody>
         <ModalFooter>
           <Button color='primary' onClick={() => cancelProduct()} >           
             Cancel
