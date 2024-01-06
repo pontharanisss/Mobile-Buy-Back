@@ -94,7 +94,7 @@ const Login = () => {
                   localStorage.setItem('userDetails', JSON.stringify(json.body.UserInfo))
                     toast.success('Login Sucessfully', {duration: 2000, style:{color:'#000', backgroundColor:'#d7d2d2'}})
                     
-                   navigate('/process/import')
+                   navigate('/process')
                 }  else {
                   toast.error('Username or password is incorrect', { duration: 2000, style:{color:'#000', backgroundColor:'#d7d2d2'} })
                 }
@@ -119,7 +119,7 @@ const Login = () => {
     } else {
       setErrors({...errors, username:false, passworddata:false}) 
       localStorage.setItem('userDetails', JSON.stringify({user_id:'001'}))
-      navigate('/process/import')    
+      navigate('/process')    
      await loginAPI()
     }
   }

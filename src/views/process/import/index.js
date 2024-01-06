@@ -7,6 +7,8 @@ import "@styles/react/libs/tables/react-dataTable-component.scss"
 import "./import_css.scss"
 import { toast } from 'react-hot-toast'
 import UILoader from "@components/ui-loader"
+import '../../../assets/style/style.css'
+import PerfectScrollbar from 'react-perfect-scrollbar'
 
 
 const TotalRecordsCard = ({ totalRecords }) => {
@@ -128,10 +130,10 @@ const Import = () => {
     <div className="invoice-list-wrapper">
       <Card>
         <div className="invoice-list-dataTable">
-          <div className="datatable-header header">
+          <div className="datatable-header header sticky">
             <CustomHeader onImportClick={onImportClick} totalRecords={tableData.length} />
           </div>
-          <div className="datatable-content react-dataTable">
+          <div className="datatable-content react-dataTable" style={{position: 'relative', marginTop: '150px'}}>
             <DataTable
               pagination={false}
               noDataComponent=""
@@ -143,9 +145,10 @@ const Import = () => {
               noHeader={true}
             />
           </div>
+         
 
           <div className="card-footer d-flex justify-content-end">
-            <Button color="success" onClick={onSubmit}>
+            <Button color="success" onClick={onSubmit} className="floatcss">
               Submit
             </Button>
           </div>
