@@ -12,6 +12,7 @@ import ExtensionsRoutes from './Extensions'
 import PageLayoutsRoutes from './PageLayouts'
 import AuthenticationRoutes from './Authentication'
 import InwardRoutes from './inward'
+import MasterRoutes from './Masters'
 
 
 import SalesRoutes from './Sales'
@@ -56,7 +57,8 @@ const Routes = [
   ...InwardRoutes,
   ...SalesRoutes,
   ...StockRoutes,
-  ...ProductRoutes
+  ...ProductRoutes,
+  ...MasterRoutes
 ]
 
 const getRouteMeta = route => {

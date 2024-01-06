@@ -1,19 +1,21 @@
 // ** React Imports
 import React, { useState, useEffect  } from 'react'
 import {
-  Card, CardHeader, CardTitle, CardBody, Row, Col, Label, Badge
+  Card, CardHeader, CardTitle, CardBody, Row, Col, Label, Badge,  Modal, ModalHeader, ModalBody, ModalFooter, Button 
 } from 'reactstrap'
 import { ChevronDown, Trash  } from 'react-feather'
 import DataTable from 'react-data-table-component'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 import '@styles/base/pages/app-invoice.scss'
 import Select from 'react-select'
+import '../../assets/style/style.css'
 
 const TransactionDetails = () => {
   // ** Store vars
   // const navigate = useNavigate()
   const [cancelledProducts, setCancelledProducts] = useState([])
-
+  const [showImeipopup, setShowImeipopup] = useState(false)
+  const [imeidetails, setImeidetails] = useState('')
   // const viewSales = () => {
   //   navigate('/transaction/sales/add')
   // }
@@ -25,6 +27,12 @@ const TransactionDetails = () => {
   useEffect(() => {
     getCancelledProducts()
   }, [])
+
+  const showImeiDetails = (row) => {
+    setImeidetails(row)
+    setShowImeipopup(!showImeipopup)
+  }
+
 
   const columns = [ 
     {
@@ -49,7 +57,7 @@ const TransactionDetails = () => {
       cell: (row)  => {
         return (
           <div className='justify-content-left align-items-center paddingtop-1'>
-            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{'#'}{row.imei_no}</h6>
+             <h6 className='user-name text-truncate mb-0 wraptext vertical_align imei_css' onClick={() => showImeiDetails(row)}>{row.imei_no}</h6>
             {row.status === 'Sold' && 
               <Label><Badge color='success' className='user-name text-truncate mb-0'>{row.status}</Badge></Label>
             }
@@ -209,7 +217,85 @@ const TransactionDetails = () => {
           </div>
           
         </CardBody>
-      </Card>     
+      </Card>  
+      <Modal isOpen={showImeipopup} toggle={() => setShowImeipopup(!showImeipopup)} 
+        className='vertically-centered-modal' fade={false}>
+          <ModalHeader toggle={() => setShowImeipopup(!showImeipopup)}>Product Details</ModalHeader>
+          <ModalBody style={{padding: '4% 8%'}}>
+            <Row className='mb-2'> 
+              <Col sm='6'> <Label className='imei_details_label'>
+                IMEI No :
+              </Label>   </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>{imeidetails.imei_no}</p> </Col>        
+            </Row>
+
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                Product Name :
+              </Label>  </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>Redmi 8A</p>  </Col>       
+            </Row>
+
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                Brand :
+              </Label> </Col> 
+              <Col sm='6'>
+              <p className='mb-25 font-16'>Redmi</p>     </Col>    
+            </Row>
+
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                Purchase Amount :
+              </Label>  </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>20,000</p> </Col>        
+            </Row>
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                Servify Fee :
+              </Label>  </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>1,000</p> </Col>        
+            </Row>
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                VAT Amount :
+              </Label>  </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>10</p>   </Col>      
+            </Row>
+
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                Sales Amount :
+              </Label>  </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>25,000</p></Col>         
+            </Row>  
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                SKU Attributes :
+              </Label>  </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>Midnight Grey| 4GB</p>   </Col>      
+            </Row>                          
+          </ModalBody>
+          <ModalFooter>            
+            <Button color='primary' outline onClick={() => setShowImeipopup(false)}>
+              Close
+            </Button>{' '}
+          </ModalFooter>
+        </Modal>   
     </div>
   )
 }

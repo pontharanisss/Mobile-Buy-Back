@@ -8,6 +8,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar'
 // ** Vertical Menu Components
 import VerticalMenuHeader from './VerticalMenuHeader'
 import VerticalNavMenuItems from './VerticalNavMenuItems'
+import '../../../../../assets/style/style.css'
 
 const Sidebar = props => {
   // ** Props
@@ -85,6 +86,11 @@ const Sidebar = props => {
                 />
               </ul>
             </PerfectScrollbar>
+            <p className='mb-0 footer_bottom'>
+                <a href='https://trio-s.com/' target='_blank'>
+                  Trio-s.com
+                </a>
+            </p>
           </Fragment>
         )}
       </div>

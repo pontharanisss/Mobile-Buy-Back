@@ -5,12 +5,14 @@ import { ChevronDown } from 'react-feather'
 import DataTable from 'react-data-table-component'
 import Select from 'react-select'
 // ** Reactstrap Imports
-import { Button, Row, Col, Card, Label, Input, CardBody, Badge } from 'reactstrap'
+import { Button, Row, Col, Card, Label, Input, CardBody, Badge, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import UILoader from '@components/ui-loader'
 // ** Styles
 import '@styles/react/apps/app-invoice.scss'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 import "./stock_css.scss"
+import '../../../assets/style/style.css'
+
 
 const CustomHeader = ({ brandValue, locationValue, statusValue, totalRecords, totalStockValue, searchValue, handleStatusValue, handleBrandValue, handleLocationValue,  showItemPopup, brandMasterList, locationMasterList, statusMasterList, handleFilter }) => {
   return (
@@ -171,10 +173,17 @@ const Stock = () => {
     { label: 'Cancelled', value: 'inactive' }
   ])
   const [currentPage] = useState(1)
+  const [showImeipopup, setShowImeipopup] = useState(false)
+  const [imeidetails, setImeidetails] = useState('')
 
   const handleFilter = (e) => {
     const value = e.target.value
     setSearchValue(value)
+  }
+
+  const showImeiDetails = (row) => {
+    setImeidetails(row)
+    setShowImeipopup(!showImeipopup)
   }
 
 
@@ -212,12 +221,12 @@ const Stock = () => {
     await setLocationMasterList(locationMasterList)
     await setStatusMasterList(statusMasterList)
     await setResult([
-      { id: '1', customer_name: '12267556542', payment_type: 'samsung', receipt_amount: '15000', Service_no:'673647832', VAT_type:'637.3', Sales_type:'Trade-in', Stock_type:'45', status: ''},
-      { id: '2', customer_name: '83926821345', payment_type: 'iphone', receipt_amount: '67000', Service_no:'9898922', VAT_type:'3462.1', Sales_type:'Trade-in', Stock_type:'12', status: 'Cancelled' },
-      { id: '3', customer_name: '87927762343', payment_type: 'one plus', receipt_amount: '72000', Service_no:'93786291', VAT_type:'578', Sales_type:'Trade-in', Stock_type:'72', status: '' },
-      { id: '4', customer_name: '34519034511', payment_type: 'Redmi', receipt_amount: '9000', Service_no:'753527638', VAT_type:'462', Sales_type:'Trade-in', Stock_type:'29', status: 'Cancelled' },
-      { id: '5', customer_name: '975263402490', payment_type: 'Xioami', receipt_amount: '10000', Service_no:'67263786274', VAT_type:'873.5', Sales_type:'Trade-in', Stock_type:'31', status: ''},
-      { id: '6', customer_name: '378786829793', payment_type: 'techno', receipt_amount: '6000', Service_no:'4652373678', VAT_type:'4662', Sales_type:'Trade-in', Stock_type:'53', status: ''}
+      { id: '1', imei_no: '12267556542', payment_type: 'samsung', receipt_amount: '15000', Service_no:'673647832', VAT_type:'637.3', Sales_type:'Trade-in', Stock_type:'45', status: ''},
+      { id: '2', imei_no: '83926821345', payment_type: 'iphone', receipt_amount: '67000', Service_no:'9898922', VAT_type:'3462.1', Sales_type:'Trade-in', Stock_type:'12', status: 'Cancelled' },
+      { id: '3', imei_no: '87927762343', payment_type: 'one plus', receipt_amount: '72000', Service_no:'93786291', VAT_type:'578', Sales_type:'Trade-in', Stock_type:'72', status: '' },
+      { id: '4', imei_no: '34519034511', payment_type: 'Redmi', receipt_amount: '9000', Service_no:'753527638', VAT_type:'462', Sales_type:'Trade-in', Stock_type:'29', status: 'Cancelled' },
+      { id: '5', imei_no: '975263402490', payment_type: 'Xioami', receipt_amount: '10000', Service_no:'67263786274', VAT_type:'873.5', Sales_type:'Trade-in', Stock_type:'31', status: ''},
+      { id: '6', imei_no: '378786829793', payment_type: 'techno', receipt_amount: '6000', Service_no:'4652373678', VAT_type:'4662', Sales_type:'Trade-in', Stock_type:'53', status: ''}
     ])
   }, [])
 
@@ -238,10 +247,10 @@ const Stock = () => {
       name: 'IMEI No',
       sortable: true,
       minWidth: '100px',
-      selector: 'customer_name',
+      selector: 'imei_no',
       cell: (row) => (
         <div className='justify-content-left' style={{paddingTop: '1%'}}>
-          <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.customer_name}</h6>
+          <h6 className='user-name text-truncate mb-0 wraptext vertical_align imei_css' onClick={() => showImeiDetails(row)}>{row.imei_no}</h6>
             {row.status === 'Sold' && 
               <Label><Badge color='success' className='user-name text-truncate'>{row.status}</Badge></Label>
             }
@@ -359,6 +368,84 @@ const Stock = () => {
           </UILoader>
         </div>
       </Card>
+      <Modal isOpen={showImeipopup} toggle={() => setShowImeipopup(!showImeipopup)} 
+        className='vertically-centered-modal' fade={false}>
+          <ModalHeader toggle={() => setShowImeipopup(!showImeipopup)}>Product Details</ModalHeader>
+          <ModalBody style={{padding: '4% 8%'}}>
+            <Row className='mb-2'> 
+              <Col sm='6'> <Label className='imei_details_label'>
+                IMEI No :
+              </Label>   </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>{imeidetails.imei_no}</p> </Col>        
+            </Row>
+
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                Product Name :
+              </Label>  </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>Redmi 8A</p>  </Col>       
+            </Row>
+
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                Brand :
+              </Label> </Col> 
+              <Col sm='6'>
+              <p className='mb-25 font-16'>Redmi</p>     </Col>    
+            </Row>
+
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                Purchase Amount :
+              </Label>  </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>20,000</p> </Col>        
+            </Row>
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                Servify Fee :
+              </Label>  </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>1,000</p> </Col>        
+            </Row>
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                VAT Amount :
+              </Label>  </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>10</p>   </Col>      
+            </Row>
+
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                Sales Amount :
+              </Label>  </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>25,000</p></Col>         
+            </Row>  
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                SKU Attributes :
+              </Label>  </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>Midnight Grey| 4GB</p>   </Col>      
+            </Row>                          
+          </ModalBody>
+          <ModalFooter>            
+            <Button color='primary' outline onClick={() => setShowImeipopup(false)}>
+              Close
+            </Button>{' '}
+          </ModalFooter>
+        </Modal>
     </div>
   )
 }

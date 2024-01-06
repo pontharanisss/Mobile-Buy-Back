@@ -11,7 +11,7 @@ import "./inward_css.scss"
 // ** Reactstrap Imports
 import {
   Row,
-  Col, Label, Card, CardHeader, CardTitle, CardBody, UncontrolledTooltip, Input, Button
+  Col, Label, Card, CardHeader, CardTitle, CardBody, UncontrolledTooltip, Input, Button,  Modal, ModalHeader, ModalBody, ModalFooter
 } from 'reactstrap'
 // ** Styles
 import '@styles/react/apps/app-invoice.scss'
@@ -191,6 +191,9 @@ const Inward = () => {
   const [brandValue, setBrandValue] = useState('')
   const [productValue, setProductValue] = useState('')
   const [searchValue, setSearchValue] = useState('')
+  const [imeidetails, setImeidetails] = useState('')
+  const [showImeipopup, setShowImeipopup] = useState(false)
+
   // const [loader, setLoader] = useState(false)
   const [brandMasterList, setBrandMasterList] = useState([
     { label: 'Apple', value: 'apple' },
@@ -238,6 +241,11 @@ const Inward = () => {
     }
   }
 
+  const showImeiDetails = (row) => {
+    setImeidetails(row)
+    setShowImeipopup(!showImeipopup)
+  }
+
   const columns = [
     {
       name: 'Action',
@@ -274,7 +282,7 @@ const Inward = () => {
       cell: row => {
         return (
           <div className='justify-content-left align-items-center paddingtop-1'>
-            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.imei_no}</h6>
+            <h6 className='user-name text-truncate mb-0 wraptext vertical_align imei_css' onClick={() => showImeiDetails(row)}>{row.imei_no}</h6>
           </div>
 
         )
@@ -463,6 +471,78 @@ const Inward = () => {
             </Row>
         </CardBody>
       </Card>
+
+      <Modal isOpen={showImeipopup} toggle={() => setShowImeipopup(!showImeipopup)} 
+        className='vertically-centered-modal' fade={false}>
+          <ModalHeader toggle={() => setShowImeipopup(!showImeipopup)}>Product Details</ModalHeader>
+          <ModalBody style={{padding: '4% 8%'}}>
+            <Row className='mb-2'> 
+              <Col sm='6'> <Label className='imei_details_label'>
+                IMEI No :
+              </Label>   </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>{imeidetails.imei_no}</p> </Col>        
+            </Row>
+
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                Product Name :
+              </Label>  </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>{imeidetails.product_name}</p>  </Col>       
+            </Row>
+
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                Brand :
+              </Label> </Col> 
+              <Col sm='6'>
+              <p className='mb-25 font-16'>{imeidetails.brand}</p>     </Col>    
+            </Row>
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                SKU Attributes :
+              </Label>  </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>Midnight Grey| 4GB</p>   </Col>      
+            </Row>    
+
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                Purchase Amount :
+              </Label>  </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>{imeidetails.purchase_amount}</p> </Col>        
+            </Row>
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                Servify Fee :
+              </Label>  </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>{imeidetails.service}</p> </Col>        
+            </Row>
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                GST :
+              </Label>  </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>{imeidetails.gst}</p>   </Col>      
+            </Row>
+  
+                                  
+          </ModalBody>
+          <ModalFooter>            
+            <Button color='primary' outline onClick={() => setShowImeipopup(false)}>
+              Close
+            </Button>{' '}
+          </ModalFooter>
+        </Modal>
 
     </div>
   )
