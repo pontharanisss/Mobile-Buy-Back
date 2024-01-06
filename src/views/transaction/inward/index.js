@@ -253,7 +253,7 @@ const Inward = () => {
       cell: (row, index) => (
         <div style={{ cursor: 'pointer' }} className='column-action d-flex align-items-center'>
           
-          <Input type='checkbox' checked={row.checked} onChange={(event) => onChangeCheckboxChange(event, index)}></Input>
+          <Input type='checkbox' style={{ outline:"1px solid #7f7676"}} checked={row.checked} onChange={(event) => onChangeCheckboxChange(event, index)}></Input>
         </div>
       )
     },
