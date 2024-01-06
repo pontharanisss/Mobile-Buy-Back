@@ -64,7 +64,7 @@ export const getUserData = () => JSON.parse(localStorage.getItem('userDetails'))
 export const getHomeRouteForLoggedInUser = userID => {
   // if (userRole === 'admin') return DefaultRoute
   // if (userRole === 'client') return '/access-control'
-  if (userID !== "" && userID !== null && userID !== undefined) return '/process/import'
+  if (userID !== "" && userID !== null && userID !== undefined) return '/process'
  
   return '/login'
 }

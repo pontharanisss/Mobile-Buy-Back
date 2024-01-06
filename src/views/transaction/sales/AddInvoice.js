@@ -101,13 +101,31 @@ const AddInvoice = () => {
         return (
           <div className='justify-content-left  paddingtop-1'>
             <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.product_name}</h6>
+            <p className='user-name text-truncate mb-0 wraptext vertical_align'>{row.sku_attribute}</p>
           </div>
 
         )
       }
-    }, 
+    },
     {
-      name: 'Sales Amount',
+      name: 'Purchase Amt',
+      sortable: true,
+      minWidth: '200px',
+      id: 'purchase_amt',
+      selector: row => row.product_name,
+      // selector: row => row.client.name,
+      cell: row => {
+        return (
+          <div className='justify-content-left  paddingtop-1'>
+            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.purchase_amount}</h6>
+            <p className='user-name text-truncate mb-0 wraptext vertical_align'>GST: {row.gst}</p>
+          </div>
+
+        )
+      }
+    },  
+    {
+      name: 'Selling Price',
       sortable: true,
       minWidth: '200px',
       right: true,
@@ -138,11 +156,12 @@ const AddInvoice = () => {
   ]
 
   const getInvoiceList = () => {
-    setimeiNumberList([{ id: '1', label:'353906104983912', value:'353906104983912', imei_no: '353906104983912', product_name: 'iPhone 11 Pro Max', brand: 'Apple', purchase_amount: '100', sales_amount: 500, checked: false, read_only: true }, { id: '2', label: '353906104983913', value: '353906104983913', imei_no: '353906104983913', product_name: 'iPhone 13 Pro Max', brand: 'Apple', purchase_amount: '200000', sales_amount: 250000, checked: false, read_only: true }])
-    setInvoiceList([{ id: '1', label:'3539061049834333', value: '3539061049834333', imei_no: '3539061049834333', product_name: 'iPhone 11 Pro Max', brand: 'Apple', purchase_amount: '100', sales_amount: 1, checked: false, read_only: true }, { id: '2', label: '353906104983913', value: '353906104983913', imei_no: '353906104983913', product_name: 'iPhone 13 Pro Max', brand: 'Apple', purchase_amount: '200000', sales_amount: 1, checked: false, read_only: true }])
+    setimeiNumberList([{ id: '1', label:'353906104983912', value:'353906104983912', imei_no: '353906104983912', product_name: 'iPhone 11 Pro Max', sku_attribute: 'Midnight Grey| 4GB', brand: 'Apple', purchase_amount: '10,000', gst: '150', sales_amount: '15,000', checked: false, read_only: true }, { id: '2', label: '353906104983913', value: '353906104983913', imei_no: '353906104983913', sku_attribute: 'Grey| 4GB', product_name: 'iPhone 13 Pro Max', brand: 'Apple', purchase_amount: '2,00,000', sales_amount: '2,50,000', checked: false, read_only: true, gst: '200' }])
+    setInvoiceList([{ id: '1', label:'3539061049834333', value: '3539061049834333', imei_no: '3539061049834333', product_name: 'iPhone 11 Pro Max', sku_attribute: 'Midnight Grey| 4GB', brand: 'Apple', purchase_amount: '10,000', gst: '123', sales_amount: '15,000', checked: false, read_only: true }, { id: '2', label: '353906104983913', value: '353906104983913', imei_no: '353906104983913', sku_attribute: 'Grey| 4GB', product_name: 'iPhone 13 Pro Max', brand: 'Apple', purchase_amount: '2,00,000', sales_amount: '3,00,000', checked: false, read_only: true, gst: '250' }])
   }
 
   useEffect(() => {
+    console.log(totalAmount, productName)
     getInvoiceList()
   }, [])
 
@@ -181,10 +200,10 @@ const AddInvoice = () => {
       amount += arr_data[i].sales_amount  //Do the math!
     }
     setTotalAmount(amount)
+    setImeiNumber('')
   }
 
-  const note =
-    ''
+  const note = ''
 
   return (
     <div className='invoice-add-wrapper'>
@@ -267,7 +286,7 @@ const AddInvoice = () => {
                   </Fragment>
               </div>
             </Col>
-            <Col className='col-bill-to ps-0' xl='3'>
+            {/* <Col className='col-bill-to ps-0' xl='3'>
               <h6 className='invoice-to-title'>Product Name</h6>
               <div className='invoice-customer'>
                   <Fragment>
@@ -279,9 +298,9 @@ const AddInvoice = () => {
                   />            
                   </Fragment>
               </div>
-            </Col>
+            </Col> */}
             <Col className='col-bill-to ps-0' xl='2'>
-              <h6 className='invoice-to-title'>Sales Amount</h6>
+              <h6 className='invoice-to-title'>Selling Price</h6>
               <div className='invoice-customer'>
                   <Fragment>
                   <Input
@@ -289,7 +308,7 @@ const AddInvoice = () => {
                     // className='invoice-edit-input'
                     value={salesAmount}
                     style={{textAlign: 'right'}}
-                    readOnly
+                    onChange={(e) => setSalesAmount(e.target.value)}
                   />                  
                   </Fragment>
               </div>
@@ -300,7 +319,66 @@ const AddInvoice = () => {
               </Button> */}
               <PlusCircle size={24} onClick={() => addImeiNumber()}/>
             </Col>
+            <Col className='col-bill-to ps-0' xl='6'>            
+            {imeiNumber && (
+              <>
+              <h6 className='invoice-to-title'>Product Details</h6>
+                <div className='invoice-customer'>
+              <Row className='row-bill-to invoice-spacing'>
+              <Col className='col-bill-to ps-0' xl='12'>
+              <table>
+                <tbody>
+                  <tr>
+                    <td className='pe-1'>Product Name:</td>
+                    <td>
+                      <span className='fw-bolder'>{productName}</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className='pe-1'>SKU Attribute</td>
+                    <td>Midnight Grey| 4GB</td>
+                  </tr>
+                  <tr>
+                    <td className='pe-1'>Purchase Amout:</td>
+                    <td>2,00,000</td>
+                  </tr>
+                  <tr>
+                    <td className='pe-1'>GST:</td>
+                    <td>150</td>
+                  </tr>                  
+                </tbody>
+              </table>
+            </Col>
+            </Row></div></>)}</Col>
           </Row>
+          {/* {imeiNumber && (
+          <Row className='row-bill-to invoice-spacing'>
+          <Col className='pe-0 mt-xl-0 mt-2' xl='4'>
+              <h6 className='mb-2'>Product Details:</h6>
+              <table>
+                <tbody>
+                  <tr>
+                    <td className='pe-1'>Product Name:</td>
+                    <td>
+                      <span className='fw-bolder'>{productName}</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className='pe-1'>SKU Attribute</td>
+                    <td>Midnight Grey| 4GB</td>
+                  </tr>
+                  <tr>
+                    <td className='pe-1'>Purchase Amout:</td>
+                    <td>2,00,000</td>
+                  </tr>
+                  <tr>
+                    <td className='pe-1'>GST:</td>
+                    <td>150</td>
+                  </tr>                  
+                </tbody>
+              </table>
+            </Col>
+            </Row>)} */}
         </CardBody>
 
         {/* Product Details */}
@@ -338,43 +416,44 @@ const AddInvoice = () => {
             <Col className='d-flex justify-content-end' md={{ size: '6', order: 2 }} xs={{ size: 12, order: 1 }}>
               <div className='invoice-total-wrapper'>
                 <Row className='invoice-total-item'>
-                <Col xl='6'>
-                <p className='invoice-total-title'>Trade-in Purchase :</p>
+                <Col xl='7'>
+                <p className='invoice-total-title'>Exempted tax price :</p>
                 </Col>
-                <Col xl='6'>
-                <p className='invoice-total-amount'>Rs. 1000</p>
-                </Col>
-                </Row>
-                <Row className='invoice-total-item'>
-                <Col xl='6'>
-                <p className='invoice-total-title'>Servify Fee :</p>
-                </Col>
-                <Col xl='6'>
-                <p className='invoice-total-amount'>Rs. 200</p>
+                <Col xl='5'>
+                <p className='invoice-total-amount'>Rs. 20,000</p>
                 </Col>
                 </Row>
                 <Row className='invoice-total-item'>
-                <Col xl='6'>
-                <p className='invoice-total-title'>VAT :</p>
+                <Col xl='7'>
+                <p className='invoice-total-title'>Taxable :</p>
                 </Col>
-                <Col xl='6'>
-                <p className='invoice-total-amount'>Rs. 10</p>
-                </Col>
-                </Row>
-                <Row className='invoice-total-item'>
-                <Col xl='6'>
-                <p className='invoice-total-title'>Total Purchase :</p>
-                </Col>
-                <Col xl='6'>
-                <p className='invoice-total-amount'>Rs. 1000</p>
+                <Col xl='5'>
+                <p className='invoice-total-amount'>Rs. 8,474.57</p>
                 </Col>
                 </Row>
                 <Row className='invoice-total-item'>
-                <Col xl='6'>
-                <p className='invoice-total-title'>Total Sales :</p>
+                <Col xl='7'>
+                <p className='invoice-total-title'>Tax18% :</p>
                 </Col>
-                <Col xl='6'>
-                <p className='invoice-total-amount'>Rs. {totalAmount}</p>
+                <Col xl='5'>
+                <p className='invoice-total-amount'>Rs. 1,525.42</p>
+                </Col>
+                </Row>
+                <Row className='invoice-total-item'>
+                <Col xl='7'>
+                <p className='invoice-total-title'>Round off :</p>
+                </Col>
+                <Col xl='5'>
+                <p className='invoice-total-amount'>Rs. 0.01</p>
+                </Col>
+                </Row>
+                <hr className='my-50' />
+                <Row className='invoice-total-item'>
+                <Col xl='7'>
+                <p className='invoice-total-amount'>Total </p>
+                </Col>
+                <Col xl='5'>
+                <p className='invoice-total-amount'>Rs. 30,000</p>
                 </Col>
                 </Row>                             
               </div>              

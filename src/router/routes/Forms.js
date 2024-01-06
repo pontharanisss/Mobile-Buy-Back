@@ -17,7 +17,6 @@ const FormRoutes = [
     element: <TransactionDetails />,
     path: '/process/viewTransactiondetails'
   }
- 
 ]
 
 export default FormRoutes
