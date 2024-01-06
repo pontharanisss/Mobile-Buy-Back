@@ -17,6 +17,7 @@ import InwardRoutes from './inward'
 import SalesRoutes from './Sales'
 import StockRoutes from './Stock'
 import ProductRoutes from './Products'
+import Reasons from './reasons'
 // ** Layouts
 import BlankLayout from '@layouts/BlankLayout'
 import VerticalLayout from '@src/layouts/VerticalLayout'
@@ -56,7 +57,9 @@ const Routes = [
   ...InwardRoutes,
   ...SalesRoutes,
   ...StockRoutes,
-  ...ProductRoutes
+  ...ProductRoutes,
+  ...Reasons
+
 ]
 
 const getRouteMeta = route => {

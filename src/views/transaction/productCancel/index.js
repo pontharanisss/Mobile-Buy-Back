@@ -8,8 +8,8 @@ import DataTable from 'react-data-table-component'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 import '@styles/base/pages/app-invoice.scss'
 import Select from 'react-select'
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
+import Flatpickr from 'react-flatpickr'
+import '@styles/react/libs/flatpickr/flatpickr.scss'
 
 const ProductCancel = () => {
   // ** Store vars
@@ -21,8 +21,7 @@ const ProductCancel = () => {
   const [reason, setReason] = useState('')
   const [deleteModal, setDeleteModal] = useState(false)
   const [selectedReason, setSelectedReason] = useState('')
-  const [fromDate, setFromDate] = useState(null)
-  const [toDate, setToDate] = useState(null)
+  const [picker, setPicker] = useState(new Date())
   // const viewSales = () => {
   //   navigate('/transaction/sales/add')
   // }
@@ -55,15 +54,14 @@ const ProductCancel = () => {
     {
       name: 'S.No.',
       sortable: true,
-      minWidth: '10px',
+      minWidth: '2px',
       id: 'id',
       cell: (row, index)  => {
         return (
           <div className='justify-content-left align-items-center paddingtop-1'>
             <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{index + 1}</h6>
           </div>
-
-        )
+ )
       }
     },
     {
@@ -124,7 +122,7 @@ const ProductCancel = () => {
     {
       name: 'User id',
       sortable: true,
-      minWidth: '200px',
+      minWidth: '90px',
       id: 'purchase_amount',
       selector: (row) => row.user,
       cell: (row) => {
@@ -143,17 +141,15 @@ const ProductCancel = () => {
     {
       name: 'Total Amount',
       sortable: true,
-      minWidth: '200px',
-      right:true,
+      minWidth: '90px',
       id: 'purchase_amount',
       selector: row => row.purchase_amount,
       cell: row => {
         return (
-          <div className='justify-content-right align-items-center paddingtop-1'>
+          <div className='d-flex flex-column align-items-start paddingtop-1'>
             <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.purchase_amount}</h6>
           </div>
-
-        )
+ )
       }
     },   
     {
@@ -202,22 +198,21 @@ const ProductCancel = () => {
 
   
   return (
-    <div className="invoice-list-wrapper">
+    <div className="cancelled-products-list-wrapper">
       <Card>
         <CardHeader className='border-bottom'>
           <CardTitle tag='h4'>Cancelled Products</CardTitle>
         </CardHeader>
         <CardBody>
           <div className='invoice-list-table-header w-100 py-2'>
-            <Row className='align-items-center'>
-              <Col lg='2'>
+            <Row>
+              <Col lg='3' className='d-flex align-items-center px-0 px-lg-1'>
                 <div className='d-flex align-items-center me-2'>
                   <label htmlFor='rows-per-page'>Show</label>
                   <Input
                     type='select'
                     id='rows-per-page'
-                    className='form-control ms-2 pe-3'
-                    style={{ width: '80px' }} // Adjusted width
+                    className='form-control ms-50 pe-3'
                   >
                     <option value='10'>10</option>
                     <option value='25'>25</option>
@@ -225,42 +220,42 @@ const ProductCancel = () => {
                   </Input>
                 </div>
               </Col>
-              <Col lg='3'>
-                <div className='d-flex align-items-center me-2'>
-                  <Label className='form-label'>From</Label>
-                  <DatePicker
-                    selected={fromDate}
-                    onChange={(date) => setFromDate(date)}
-                    className='form-control'
+              <Col lg='5' className='d-flex align-items-center px-0 px-lg-1'>
+                <div className='mb-1' style={{ marginRight: '1%' }}>
+                  <h6 className='invoice-to-title'>From Date</h6>
+                  <Flatpickr
+                    value={picker}
+                    onChange={(date) => setPicker(date)}
+                    options={{ maxDate: new Date(), dateFormat: 'd-m-Y' }}
+                    className='form-control invoice-edit-input date-picker'
                   />
                 </div>
-              </Col>
-              <Col lg='2'>
-                <div className='d-flex align-items-center me-2'>
-                  <Label className='form-label'>To</Label>
-                  <DatePicker
-                    selected={toDate}
-                    onChange={(date) => setToDate(date)}
-                    className='form-control'
+                <div className='mb-1' style={{ marginRight: '2%' }}>
+                  <h6 className='invoice-to-title'>To Date</h6>
+                  <Flatpickr
+                    value={picker}
+                    onChange={(date) => setPicker(date)}
+                    options={{ maxDate: new Date(), dateFormat: 'd-m-Y' }}
+                    className='form-control invoice-edit-input date-picker'
                   />
                 </div>
+                <div style={{ marginRight: '2%', marginTop: '1.5%' }}>
+                  <Button onClick={() => AddCancelProduct()} color='primary'>Add</Button>
+                </div>
               </Col>
-              <Col lg='3'>
-                <div className='d-flex align-items-center me-2 justify-content-end'> {/* Adjusted alignment */}
+              <Col
+                lg='4'
+                className='actions-right d-flex align-items-center justify-content-lg-end flex-lg-nowrap flex-wrap mt-lg-0 mt-1 pe-lg-1 p-0'
+              >
+                <div className='d-flex align-items-center'>
                   <label htmlFor='search-invoice'>Search</label>
                   <Input
                     id='search-invoice'
-                    className='ms-2 me-2 w-100'
+                    className='ms-50 me-2 w-100'
                     type='text'
                     placeholder='Search'
-                    style={{ width: '150px' }} 
                   />
                 </div>
-              </Col>
-              <Col lg='2' className='text-end'> {/* Adjusted alignment */}
-                <Button onClick={() => AddCancelProduct()} color='primary'>
-                  Add
-                </Button>
               </Col>
             </Row>
           </div>
@@ -288,49 +283,61 @@ const ProductCancel = () => {
         className='vertically-centered-modal' fade={false}>
         <ModalHeader toggle={() => setProductCancelModal(!productCancelModal)} style={{backgroundColor: '#b3003b !important'}}>Cancel Product</ModalHeader>
         <ModalBody>
-          <div className='mb-2'>
+  <div className='mb-2'>
+    <Label className='form-label required' for='email'>
+      IMEI Number
+    </Label>
+    <Select
+      isClearable={false}
+      options={imei_numbers}
+      className='react-select'
+      value={imei_number}
+      onChange={(e) => onChangeIMEI_Number(e)}
+    />
+  </div>
+  <Row className='mb-2'>
+    <Col md='4'>
+      <Label className='form-label' for='email'>
+        Product Name :
+      </Label>
+    </Col>
+    <Col>
+      <span>{imei_number && imei_number.product_name}</span>
+    </Col>
+  </Row>
+  <Row className='mb-2'>
+    <Col md='4'>
+      <Label className='form-label' for='email'>
+        Brand :
+      </Label>
+    </Col>
+    <Col>
+      <span>{imei_number && imei_number.brand}</span>
+    </Col>
+  </Row>
+  <Row className='mb-2'>
+    <Col md='4'>
+      <Label className='form-label' for='email'>
+        SKU Attributes:
+      </Label>
+    </Col>
+    <Col>
+      <span>{imei_number && imei_number.purchase_amount}</span>
+    </Col>
+  </Row>
+  <Row className='mb-2'>
+    <Col md='4'>
+      <Label className='form-label' for='email'>
+        Total Amount:
+      </Label>
+    </Col>
+    <Col>
+      <span>{imei_number && imei_number.servify_amount}</span>
+    </Col>
+  </Row>
+  <div className='mb-2'>
             <Label className='form-label required' for='email'>
-              IMEI Number
-            </Label>
-            <Select
-              isClearable={false}
-              options={imei_numbers}
-              className='react-select'
-              value={imei_number}
-              onChange={(e) => onChangeIMEI_Number(e)}
-            />
-          </div>
-          <div className='mb-2'>
-            <Label className='form-label' for='email'>
-              Product Name
-            </Label>            
-            <Input type='text' readOnly maxLength={50}  autoComplete="off" value={imei_number && imei_number.product_name ? imei_number.product_name : ''}
-             />
-          </div>   
-          <div className='mb-2'>
-            <Label className='form-label' for='email'>
-              Brand
-            </Label>            
-            <Input type='text'  readOnly maxLength={50}  autoComplete="off"  value={imei_number && imei_number.brand ? imei_number.brand : ''}
-             />
-          </div>   
-          <div className='mb-2'>
-            <Label className='form-label' for='email'>
-            SKU Attributes
-            </Label>            
-            <Input type='text' readOnly maxLength={50}  autoComplete="off"  value={imei_number && imei_number.purchase_amount ? imei_number.purchase_amount : ''}
-             />
-          </div>  
-          <div className='mb-2'>
-            <Label className='form-label' for='email'>
-              Total Amount
-            </Label>            
-            <Input type='text' readOnly  maxLength={50}  autoComplete="off"  value={imei_number && imei_number.servify_amount ? imei_number.servify_amount : ''}
-             />
-          </div>  
-          <div className='mb-2'>
-            <Label className='form-label required' for='email'>
-             Remarks
+             Remarks 
             </Label>
             <Select
               isClearable={false}
