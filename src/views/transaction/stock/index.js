@@ -221,12 +221,12 @@ const Stock = () => {
     await setLocationMasterList(locationMasterList)
     await setStatusMasterList(statusMasterList)
     await setResult([
-      { id: '1', imei_no: '12267556542', payment_type: 'samsung', receipt_amount: '15000', Service_no:'673647832', VAT_type:'637.3', Sales_type:'Trade-in', Stock_type:'45', status: ''},
-      { id: '2', imei_no: '83926821345', payment_type: 'iphone', receipt_amount: '67000', Service_no:'9898922', VAT_type:'3462.1', Sales_type:'Trade-in', Stock_type:'12', status: 'Cancelled' },
-      { id: '3', imei_no: '87927762343', payment_type: 'one plus', receipt_amount: '72000', Service_no:'93786291', VAT_type:'578', Sales_type:'Trade-in', Stock_type:'72', status: '' },
-      { id: '4', imei_no: '34519034511', payment_type: 'Redmi', receipt_amount: '9000', Service_no:'753527638', VAT_type:'462', Sales_type:'Trade-in', Stock_type:'29', status: 'Cancelled' },
-      { id: '5', imei_no: '975263402490', payment_type: 'Xioami', receipt_amount: '10000', Service_no:'67263786274', VAT_type:'873.5', Sales_type:'Trade-in', Stock_type:'31', status: ''},
-      { id: '6', imei_no: '378786829793', payment_type: 'techno', receipt_amount: '6000', Service_no:'4652373678', VAT_type:'4662', Sales_type:'Trade-in', Stock_type:'53', status: ''}
+      { id: '1', imei_no: '12267556542', product: 'samsung', purchase_amount: '15000', servify:'200', gst:'637.3', sales:'20,000', stock:'45', status: ''},
+      { id: '2', imei_no: '83926821345', product: 'iphone', purchase_amount: '67000', servify: '100', gst: '3462.1', sales: '30,000', stock:'12', status: 'Cancelled' },
+      { id: '3', imei_no: '87927762343', product: 'one plus', purchase_amount: '72000', servify: '90', gst: '578', sales: '10,000', stock:'72', status: '' },
+      { id: '4', imei_no: '34519034511', product: 'Redmi', purchase_amount: '9000', servify: '300', gst: '462', sales: '5,000', stock:'29', status: 'Cancelled' },
+      { id: '5', imei_no: '975263402490', product: 'Xioami', purchase_amount: '10000', servify: '100', gst: '873.5', sales: '20,000', stock:'31', status: ''},
+      { id: '6', imei_no: '378786829793', product: 'techno', purchase_amount: '6000', servify: '200', gst: '4662', sales: '30,000', stock:'53', status: ''}
     ])
   }, [])
 
@@ -264,54 +264,58 @@ const Stock = () => {
       name: 'Product name',
       sortable: true,
       minWidth: '100px',
-      selector: 'payment_type',
+      selector: 'product',
       cell: (row) => (
         <div className='justify-content-left align-items-center paddingtop-1'>
-          <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.payment_type}</h6>
+          <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.product}</h6>
         </div>
       )
     },
     {
       name: 'Purchase Amount',
       sortable: true,
-      minWidth: '100px',
-      selector: 'receipt_amount',
+      minWidth: '130px',
+      selector: 'purchase_amount',
+      right: true,
       cell: (row) => (
         <div className='justify-content-left align-items-center paddingtop-1'>
-          <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.receipt_amount}</h6>
+          <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.purchase_amount}</h6>
         </div>
       )
     },
     {
-      name: 'Service No',
+      name: 'Servify Fee',
       sortable: true,
-      minWidth: '100px',
-      selector: 'Service_no',
+      minWidth: '50px',
+      right:true,
+      selector: 'servify',
       cell: (row) => (
         <div className='justify-content-left align-items-center paddingtop-1'>
-          <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.Service_no}</h6>
+          <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.servify}</h6>
         </div>
       )
     },
     {
-      name: 'VAT',
+      name: 'GST',
       sortable: true,
       minWidth: '100px',
-      selector: 'VAT_type',
+      selector: 'gst',
+      right: true,
       cell: (row) => (
         <div className='justify-content-left align-items-center paddingtop-1'>
-          <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.VAT_type}</h6>
+          <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.gst}</h6>
         </div>
       )
     },
     {
-      name: 'Sales Amount',
+      name: 'Sales',
       sortable: true,
+      right: true,
       minWidth: '100px',
-      selector: 'Sales_type',
+      selector: 'sales',
       cell: (row) => (
         <div className='justify-content-left align-items-center paddingtop-1'>
-          <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.Sales_type}</h6>
+          <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.sales}</h6>
         </div>
       )
     },
@@ -319,10 +323,10 @@ const Stock = () => {
       name: 'Stock',
       sortable: true,
       minWidth: '100px',
-      selector: 'Stock_type',
+      selector: 'stock',
       cell: (row) => (
         <div className='justify-content-left align-items-center paddingtop-1'>
-          <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.Stock_type}</h6>
+          <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.stock}</h6>
         </div>
       )
     }

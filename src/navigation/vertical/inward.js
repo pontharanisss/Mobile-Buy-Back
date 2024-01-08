@@ -1,11 +1,11 @@
 // ** Icons Import
-import { FileText } from 'react-feather'
+import { ShoppingCart } from 'react-feather'
 
 export default [
   {
     id: 'inward',
     title: 'Stock Inward  ',
-    icon: <FileText size={20} />,
+    icon: <ShoppingCart size={20} />,
     navLink: 'transaction/inward'
   }
   // {

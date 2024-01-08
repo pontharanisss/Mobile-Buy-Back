@@ -1,11 +1,11 @@
 // ** Icons Import
-import { FileText } from 'react-feather'
+import { ShoppingBag } from 'react-feather'
 
 export default [
   {
     id: 'stock',
     title: 'Stock Report  ',
-    icon: <FileText size={20} />,
+    icon: <ShoppingBag size={20} />,
     navLink: 'transaction/stock'
   }
 ]

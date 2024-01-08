@@ -13,4 +13,4 @@ import reasons from './reasons'
 // import Masters from './masters'
 
 // ** Merge & Export
-export default [...forms, ...masters, ...inward, ...Sales, ...Stock, ...reasons, ...Products]
+export default [...forms, ...masters, ...inward, ...Sales, ...reasons, ...Products, ...Stock]

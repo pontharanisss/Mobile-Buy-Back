@@ -1,10 +1,10 @@
-import { FileText } from 'react-feather'
+import { Save } from 'react-feather'
 
 export default [
   {
     id: 'reasons',
     title: 'Reasons  ',
-    icon: <FileText size={20} />,
+    icon: <Save size={20} />,
     navLink: 'transaction/reasons'
   }
 ]
