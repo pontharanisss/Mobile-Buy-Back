@@ -18,7 +18,7 @@ const Reasons = () => {
   const [productCancelModal, setProductCancelModal] = useState(false)
   const [reason, setReason] = useState('')
   const [deleteModal, setDeleteModal] = useState(false)
-  const [selectedReason, setSelectedReason] = useState('')
+  // const [selectedReason, setSelectedReason] = useState('')
   const [statusMasterList, setStatusMasterList] = useState([
     { label: 'All', value: 'all' },
     { label: 'Active', value: 'active' },
@@ -44,7 +44,6 @@ const Reasons = () => {
       { id: '5', imei_no: '351906112321343', product_name: 'OPPO V 8', brand: 'OPPO', reason: 'Loss', purchase_amount: 'active', servify_amount: '4000', vat_amount: '503', details: 'damage', reasons: 'Display bug', user:'#005', date:'01/12/2024',  time:'11:48PM' }
     ])
 
-   
   }
 
   useEffect(() => {
@@ -52,8 +51,7 @@ const Reasons = () => {
     setStatusMasterList(statusMasterList)
   }, [])
 
-  
-  const Reasons = [{label: 'Lost', value: 'lost'}, {label: 'damage', value: 'damage'}]
+ const Reasons = [{label: 'Lost', value: 'lost'}, {label: 'damage', value: 'damage'}]
   const columns = [ 
     {
       name: 'S.No.',
@@ -137,12 +135,11 @@ const Reasons = () => {
     setCancelledProducts(arr_data) 
     setProductCancelModal(!productCancelModal)
   }
-const onChangereasons = (data) => {
-    setSelectedReason(data)
-  }
+// const onChangereasons = (data) => {
+//     setSelectedReason(data)
+//   }
 
-  
-  return (
+return (
     <div className="cancelled-products-list-wrapper">
       <Card>
         <CardHeader className='border-bottom'>
@@ -220,7 +217,7 @@ const onChangereasons = (data) => {
         className='vertically-centered-modal' fade={false}>
         <ModalHeader toggle={() => setProductCancelModal(!productCancelModal)} style={{backgroundColor: '#b3003b !important'}}>Cancel Product</ModalHeader>
         <ModalBody>
-             <div className='mb-2'>
+             {/* <div className='mb-2'>
             <Label className='form-label required' for='email'>
              Remarks 
             </Label>
@@ -231,7 +228,7 @@ const onChangereasons = (data) => {
               value={selectedReason}
               onChange={(e) => onChangereasons(e)}
             />
-          </div>
+          </div> */}
             <div className='mb-2'>
             <Label className='form-label required' for='email'>
               Reason

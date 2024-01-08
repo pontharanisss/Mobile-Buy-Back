@@ -28,6 +28,10 @@ const NavbarUser = (props) => {
             <ThemeToggler />
           </NavLink>
         </NavItem>
+        <NavItem className="d-none d-lg-block">
+          <p className="mb-0" style={{textAlign: 'right', fontWeight: '600'}}>Admin</p>
+          <p className="mb-0">06/01/2024, 10:30 AM</p>
+        </NavItem>
         <UserDropdown />
       </ul>
     </>

@@ -36,7 +36,8 @@ const AddInvoice = () => {
   const [totalAmount, setTotalAmount] = useState(0)
   const [salesDeleteModal, setSalesDeleteModal] = useState(false)
   const [deleteImeiNumber, setDeleteImeiNumber] = useState('')
-
+  const [showImeipopup, setShowImeipopup] = useState(false)
+  const [imeidetails, setImeidetails] = useState('')
   //Delete Local Array
   const ondeleteImeiNumber = index => {
     console.log(index)
@@ -56,6 +57,11 @@ const AddInvoice = () => {
   const deleteConfirmation = (index) => {
     setDeleteImeiNumber(index)
     setSalesDeleteModal(!salesDeleteModal)
+  }
+
+  const showImeiDetails = (row) => {
+    setImeidetails(row)
+    setShowImeipopup(!showImeipopup)
   }
 
   const columns = [ 
@@ -82,7 +88,7 @@ const AddInvoice = () => {
       cell: row => {
         return (
           <div className='justify-content-left align-items-center paddingtop-1'>
-            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.imei_no}</h6>
+            <h6 className='user-name text-truncate mb-0 wraptext vertical_align imei_css' onClick={() => showImeiDetails(row)}>{row.imei_no}</h6>
           </div>
 
         )
@@ -493,6 +499,85 @@ const AddInvoice = () => {
             </Button>{' '}
             <Button color='primary' outline onClick={() => setSalesDeleteModal(false)}>
               No
+            </Button>{' '}
+          </ModalFooter>
+        </Modal>
+
+        <Modal isOpen={showImeipopup} toggle={() => setShowImeipopup(!showImeipopup)} 
+        className='vertically-centered-modal' fade={false}>
+          <ModalHeader toggle={() => setShowImeipopup(!showImeipopup)}>Product Details</ModalHeader>
+          <ModalBody style={{padding: '4% 8%'}}>
+            <Row className='mb-2'> 
+              <Col sm='6'> <Label className='imei_details_label'>
+                IMEI No :
+              </Label>   </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>{imeidetails.imei_no}</p> </Col>        
+            </Row>
+
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                Product Name :
+              </Label>  </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>{imeidetails.product_name}</p>  </Col>       
+            </Row>
+
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                Brand :
+              </Label> </Col> 
+              <Col sm='6'>
+              <p className='mb-25 font-16'>{imeidetails.brand}</p>     </Col>    
+            </Row>
+
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                Purchase Amount :
+              </Label>  </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>{imeidetails.purchase_amount}</p> </Col>        
+            </Row>
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                Servify Fee :
+              </Label>  </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>1,000</p> </Col>        
+            </Row>
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                VAT Amount :
+              </Label>  </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>10</p>   </Col>      
+            </Row>
+
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                Sales Amount :
+              </Label>  </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>{imeidetails.sales_amount}</p></Col>         
+            </Row>  
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                SKU Attributes :
+              </Label>  </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>Midnight Grey| 4GB</p>   </Col>      
+            </Row>                          
+          </ModalBody>
+          <ModalFooter>            
+            <Button color='primary' outline onClick={() => setShowImeipopup(false)}>
+              Close
             </Button>{' '}
           </ModalFooter>
         </Modal>

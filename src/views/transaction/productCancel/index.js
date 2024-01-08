@@ -10,6 +10,8 @@ import '@styles/base/pages/app-invoice.scss'
 import Select from 'react-select'
 import Flatpickr from 'react-flatpickr'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
+import '../../../assets/style/style.css'
+
 
 const ProductCancel = () => {
   // ** Store vars
@@ -22,6 +24,8 @@ const ProductCancel = () => {
   const [deleteModal, setDeleteModal] = useState(false)
   const [selectedReason, setSelectedReason] = useState('')
   const [picker, setPicker] = useState(new Date())
+  const [showImeipopup, setShowImeipopup] = useState(false)
+  const [imeidetails, setImeidetails] = useState('')
   // const viewSales = () => {
   //   navigate('/transaction/sales/add')
   // }
@@ -48,6 +52,12 @@ const ProductCancel = () => {
     getCancelledProducts()
   }, [])
 
+  
+  const showImeiDetails = (row) => {
+    setImeidetails(row)
+    setShowImeipopup(!showImeipopup)
+  }
+
   const imei_numbers = [{label: '4532612121212121', value: '4532612121212121'}, {label: '6534343434343421', value: '6534343434343421'}, {label: '554323213213121', value: '554323213213121'}, {label: '453222311212121', value: '453222311212121'}, {label: '65756756756756', value: '65756756756756'}]
   const Reasons = [{label: 'Lost', value: 'lost'}, {label: 'damage', value: 'damage'}]
   const columns = [ 
@@ -72,7 +82,7 @@ const ProductCancel = () => {
       cell: (row)  => {
         return (
           <div className='justify-content-left align-items-center paddingtop-1'>
-            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{'#'}{row.imei_no}</h6>
+            <h6 className='user-name text-truncate mb-0 wraptext vertical_align imei_css' onClick={() => showImeiDetails(row)}>{row.imei_no}</h6>
           </div>
 
         )
@@ -363,9 +373,7 @@ const ProductCancel = () => {
           </Button>{' '}
         </ModalFooter>
       </Modal>
-
-
-      <Modal isOpen={deleteModal} toggle={() => setDeleteModal(!deleteModal)} 
+<Modal isOpen={deleteModal} toggle={() => setDeleteModal(!deleteModal)} 
         className='vertically-centered-modal' fade={false}>
           <ModalHeader toggle={() => setDeleteModal(!deleteModal)}>Confirmation</ModalHeader>
           <ModalBody>
@@ -381,6 +389,85 @@ const ProductCancel = () => {
             </Button>{' '}
             <Button color='primary' outline onClick={() => setDeleteModal(false)}>
               No
+            </Button>{' '}
+          </ModalFooter>
+        </Modal>
+
+        <Modal isOpen={showImeipopup} toggle={() => setShowImeipopup(!showImeipopup)} 
+        className='vertically-centered-modal' fade={false}>
+          <ModalHeader toggle={() => setShowImeipopup(!showImeipopup)}>Product Details</ModalHeader>
+          <ModalBody style={{padding: '4% 8%'}}>
+            <Row className='mb-2'> 
+              <Col sm='6'> <Label className='imei_details_label'>
+                IMEI No :
+              </Label>   </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>{imeidetails.imei_no}</p> </Col>        
+            </Row>
+
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                Product Name :
+              </Label>  </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>Redmi 8A</p>  </Col>       
+            </Row>
+
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                Brand :
+              </Label> </Col> 
+              <Col sm='6'>
+              <p className='mb-25 font-16'>Redmi</p>     </Col>    
+            </Row>
+
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                Purchase Amount :
+              </Label>  </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>20,000</p> </Col>        
+            </Row>
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                Servify Fee :
+              </Label>  </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>1,000</p> </Col>        
+            </Row>
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                VAT Amount :
+              </Label>  </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>10</p>   </Col>      
+            </Row>
+
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                Sales Amount :
+              </Label>  </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>25,000</p></Col>         
+            </Row>  
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                SKU Attributes :
+              </Label>  </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>Midnight Grey| 4GB</p>   </Col>      
+            </Row>                          
+          </ModalBody>
+          <ModalFooter>            
+            <Button color='primary' outline onClick={() => setShowImeipopup(false)}>
+              Close
             </Button>{' '}
           </ModalFooter>
         </Modal>
