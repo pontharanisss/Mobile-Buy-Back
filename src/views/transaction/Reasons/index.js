@@ -3,20 +3,21 @@ import React, { useState, useEffect  } from 'react'
 import {
   Card, CardHeader, CardTitle, CardBody, UncontrolledTooltip, Input, Button, Row, Col, Modal, ModalHeader, ModalBody, ModalFooter, Label 
 } from 'reactstrap'
-import { ChevronDown, Trash  } from 'react-feather'
+import { ChevronDown, Trash, Edit } from 'react-feather'
 import DataTable from 'react-data-table-component'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 import '@styles/base/pages/app-invoice.scss'
 import Select from 'react-select'
+import toast from 'react-hot-toast'
 
 const Reasons = () => {
   // ** Store vars
   // const navigate = useNavigate()
   const [cancelledProducts, setCancelledProducts] = useState([])
   const [statusValue, setStatusValue] = useState('')
-  const [imei_number, setIMEI_NUMBER] = useState({})
   const [productCancelModal, setProductCancelModal] = useState(false)
   const [reason, setReason] = useState('')
+  const [editMode, setEditMode] = useState(false)
   const [deleteModal, setDeleteModal] = useState(false)
   // const [selectedReason, setSelectedReason] = useState('')
   const [statusMasterList, setStatusMasterList] = useState([
@@ -25,10 +26,22 @@ const Reasons = () => {
     { label: 'Cancelled', value: 'inactive' }
   ])
  
+  const openModal = (editMode) => {
+    setEditMode(editMode)
+    setReason('')
+    setProductCancelModal(!productCancelModal)
+  }
   // const viewSales = () => {
   //   navigate('/transaction/sales/add')
   // }
 
+
+  const closeCancelProduct = () => {
+   
+    setReason('')
+    setProductCancelModal(!productCancelModal)
+  }
+  
   const handleStatusValue = (value) => {
     // Handle status value logic
     console.log('Selected Status:', value)
@@ -37,13 +50,40 @@ const Reasons = () => {
 
   const getCancelledProducts = () => {
     setCancelledProducts([
-      { id: '1', imei_no: '3539061123213123', product_name: 'iPhone 11 Pro', brand: 'Apple', reason: 'Loss', purchase_amount: 'inactive', servify_amount: '5000', vat_amount: '200', details: 'damage', reasons: 'Display not working', user:'#001', date:'01/12/2024', time:'11:24AM' },
-      { id: '2', imei_no: '3539061123213145', product_name: 'Nokia RT 800 ', brand: 'Nokia', reason: 'Loss', purchase_amount: 'inactive', servify_amount: '2000 ', vat_amount: '100', details: 'loss', reasons:  'Fault in screen', user:'#002', date:'01/12/2024',  time:'1:24PM' },
-      { id: '3', imei_no: '4984061123213123', product_name: 'Redmi 8A Dual', brand: 'MI', reason: 'Loss', purchase_amount: 'active ', servify_amount: '1000', vat_amount: '200', details: 'damage', reasons: 'Over hanging', user:'#003', date:'01/12/2024',  time:'5:00PM'  },
-      { id: '4', imei_no: '8722161123213123', product_name: 'Samsung Galaxy 2', brand: 'Samsung', reason: 'Loss', purchase_amount: 'active', servify_amount: '3000', vat_amount: '300', details: 'loss', reasons: 'Not working', user:'#004', date:'01/12/2024',  time:'1:24AM'  },
-      { id: '5', imei_no: '351906112321343', product_name: 'OPPO V 8', brand: 'OPPO', reason: 'Loss', purchase_amount: 'active', servify_amount: '4000', vat_amount: '503', details: 'damage', reasons: 'Display bug', user:'#005', date:'01/12/2024',  time:'11:48PM' }
+      { id: '1', product_name: 'iPhone 11 Pro', brand: 'Apple', purchase_amount: 'inactive', details: 'damage', reasons: 'Display not working', user:'#001', date:'01/12/2024', time:'11:24AM' },
+      { id: '2', product_name: 'Nokia RT 800 ', brand: 'Nokia', purchase_amount: 'inactive', details: 'loss', reasons:  'Fault in screen', user:'#002', date:'01/12/2024',  time:'1:24PM' },
+      { id: '3', product_name: 'Redmi 8A Dual', brand: 'MI', purchase_amount: 'active ', details: 'damage', reasons: 'Over hanging', user:'#003', date:'01/12/2024',  time:'5:00PM'  },
+      { id: '4', product_name: 'Samsung Galaxy 2', brand: 'Samsung', purchase_amount: 'active', details: 'loss', reasons: 'Not working', user:'#004', date:'01/12/2024',  time:'1:24AM'  },
+      { id: '5', product_name: 'OPPO V 8', brand: 'OPPO', purchase_amount: 'active', details: 'damage', reasons: 'Display bug', user:'#005', date:'01/12/2024',  time:'11:48PM' }
     ])
+ }
 
+ const addProduct = () => {
+  if (!reason) {
+    toast.error('Please fill in the Reason field.', {
+      duration: 2000,
+      style: { color: '#000', backgroundColor: '#d7d2d2' }
+    })
+    return
+  }
+  const newProduct = {
+    id: (cancelledProducts.length + 1).toString(),
+   reason
+  }
+  
+  setCancelledProducts([...cancelledProducts, newProduct])
+  closeCancelProduct()
+}
+
+const updateProduct = () => {
+  if (!reason) {
+    toast.error('Please fill in the Reason field.', {
+      duration: 2000,
+      style: { color: '#000', backgroundColor: '#d7d2d2' }
+    })
+    return
+  }
+    closeCancelProduct()
   }
 
   useEffect(() => {
@@ -51,8 +91,7 @@ const Reasons = () => {
     setStatusMasterList(statusMasterList)
   }, [])
 
- const Reasons = [{label: 'Lost', value: 'lost'}, {label: 'damage', value: 'damage'}]
-  const columns = [ 
+const columns = [ 
     {
       name: 'S.No.',
       sortable: true,
@@ -64,8 +103,6 @@ const Reasons = () => {
             <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{index + 1}</h6>
           </div>
  )
-
- 
       }
     },
     {
@@ -79,13 +116,7 @@ const Reasons = () => {
           <div className='d-flex flex-column align-items-start paddingtop-1'>
             <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>
               <span>{row.reasons}</span>
-              {row.details && (
-                <>
-                  <br />
-                  <small style={{ fontSize: '10px', textAlign: 'left' }}>{row.details}</small>
-                </>
-              )}
-            </h6>
+             </h6>
           </div>
         )
       }
@@ -108,11 +139,15 @@ const Reasons = () => {
       name: 'Action',
       minWidth: '110px',
       cell: (row, index) => (
-        <div className='column-action d-flex align-items-center'>          
-          <Trash size={14} className='me-50' id={`delete-tooltip-${index}`} onClick={() => setDeleteModal(true)}/>
+        <div className='column-action d-flex align-items-center'>
+          <Edit size={14} className='me-50' id={`edit-tooltip-${index}`} onClick={() => openModal(true)} />
+          <UncontrolledTooltip placement='top' target={`edit-tooltip-${index}`}>
+            Edit
+          </UncontrolledTooltip>
+          <Trash size={14} className='me-50' id={`delete-tooltip-${index}`} onClick={() => setDeleteModal(true)} />
           <UncontrolledTooltip placement='top' target={`delete-tooltip-${index}`}>
             Delete
-        </UncontrolledTooltip>
+          </UncontrolledTooltip>
         </div>
       )
     }
@@ -120,23 +155,17 @@ const Reasons = () => {
 
   // add click
   const AddCancelProduct = () => {
-    setIMEI_NUMBER('')
     setReason('')
+    setEditMode(false)
     setProductCancelModal(!productCancelModal)
   }
 
-  const closeCancelProduct = () => {
-    setIMEI_NUMBER('')
-    setReason('')
-    setProductCancelModal(!productCancelModal)
+ 
+  const EditProduct = () => {
+    setEditMode(true) 
+   
   }
-
-  const cancelProduct = () => { 
-    const arr_data = Object.assign([], cancelledProducts)
-    arr_data.push(imei_number)
-    setCancelledProducts(arr_data) 
-    setProductCancelModal(!productCancelModal)
-  }
+  
 // const onChangereasons = (data) => {
 //     setSelectedReason(data)
 //   }
@@ -178,8 +207,8 @@ return (
                  </div>
               </Col>
               <Col lg='2'>
-                <div className='d-flex align-items-center'>
-                  <Button onClick={() => AddCancelProduct()} color='primary'>Add</Button>
+              <div className='d-flex align-items-center'>
+                  <Button onClick={() => openModal(false)} color='primary'>Add</Button>
                 </div>
               </Col>
               <Col lg='5'>
@@ -215,49 +244,47 @@ return (
           
         </CardBody>
       </Card>
-      <Modal isOpen={productCancelModal} toggle={() => setProductCancelModal(!productCancelModal)}
-        className='vertically-centered-modal' fade={false}>
-        <ModalHeader toggle={() => setProductCancelModal(!productCancelModal)} style={{backgroundColor: '#b3003b !important'}}>Cancel Product</ModalHeader>
+      <Modal isOpen={productCancelModal} toggle={() => setProductCancelModal(!productCancelModal)} className='vertically-centered-modal' fade={false}>
+        {/* ... (previous modal JSX) */}
+        <ModalHeader toggle={() => setProductCancelModal(!productCancelModal)} style={{ backgroundColor: '#b3003b !important' }}>
+          {editMode ? 'Update Reason' : 'Add Reason'}
+        </ModalHeader>
         <ModalBody>
-             {/* <div className='mb-2'>
-            <Label className='form-label required' for='email'>
-             Remarks 
-            </Label>
-            <Select
-              isClearable={false}
-              options={Reasons}
-              className='react-select'
-              value={selectedReason}
-              onChange={(e) => onChangereasons(e)}
-            />
-          </div> */}
-            <div className='mb-2'>
+          <div className='mb-2'>
             <Label className='form-label required' for='email'>
               Reason
-            </Label>  
-            <Input type='textarea' rows='3' id='reason' value={reason}  onChange={event => setReason(event.target.value)}/>          
-             </div>     
-             <div className='mb-2'>
-      <Label className='form-label required'>Status</Label>
-      <div>
-        <Label check className='me-2'>
-          <Input type='radio' name='status' value='active' />{' '}
-          Active
-        </Label>
-        <Label check>
-          <Input type='radio' name='status' value='inactive' />{' '}
-          Inactive
-        </Label>
-      </div>
-    </div>
-      </ModalBody>
+            </Label>
+            <Input type='text' id='reason' value={reason} onChange={(event) => setReason(event.target.value)} />
+          </div>
+          {editMode && (
+            <div className='mb-2'>
+              <Label className='form-label required'>Status</Label>
+              <div>
+                <Label check className='me-2'>
+                  <Input type='radio' name='status' value='active' />{' '}
+                  Active
+                </Label>
+                <Label check>
+                  <Input type='radio' name='status' value='inactive' />{' '}
+                  Inactive
+                </Label>
+              </div>
+            </div>
+          )}
+        </ModalBody>
         <ModalFooter>
-          <Button color='primary' onClick={() => cancelProduct()} >           
-            Cancel
-          </Button>{' '}
+          {editMode ? (
+            <Button color='primary' onClick={() => updateProduct()}>
+              Update
+            </Button>
+          ) : (
+            <Button color='primary' onClick={() => addProduct()}>
+              Add
+            </Button>
+          )}
           <Button color='primary' outline onClick={() => closeCancelProduct()}>
-            Close
-          </Button>{' '}
+            Cancel
+          </Button>
         </ModalFooter>
       </Modal>
   <Modal isOpen={deleteModal} toggle={() => setDeleteModal(!deleteModal)} 

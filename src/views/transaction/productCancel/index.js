@@ -11,7 +11,7 @@ import Select from 'react-select'
 import Flatpickr from 'react-flatpickr'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
 import '../../../assets/style/style.css'
-
+import toast from 'react-hot-toast'
 
 const ProductCancel = () => {
   // ** Store vars
@@ -189,10 +189,23 @@ const ProductCancel = () => {
     setProductCancelModal(!productCancelModal)
   }
 
-  const cancelProduct = () => { 
-    const arr_data = Object.assign([], cancelledProducts)
-    arr_data.push(imei_number)
-    setCancelledProducts(arr_data) 
+  const cancelProduct = () => {
+    if (!selectedReason) {
+      toast.error('Please select a reason.', {
+        duration: 2000,
+        style: { color: '#000', backgroundColor: '#d7d2d2' }
+      })
+      return
+    }
+  
+    const newProduct = {
+      id: (cancelledProducts.length + 1).toString(),
+      reason: selectedReason.label, 
+      imei_number 
+    }
+  
+    const updatedProducts = [...cancelledProducts, newProduct]
+    setCancelledProducts(updatedProducts)
     setProductCancelModal(!productCancelModal)
   }
 
@@ -347,7 +360,7 @@ const ProductCancel = () => {
   </Row>
   <div className='mb-2'>
             <Label className='form-label required' for='email'>
-             Remarks 
+               Reasons
             </Label>
             <Select
               isClearable={false}
@@ -359,11 +372,11 @@ const ProductCancel = () => {
           </div>
             <div className='mb-2'>
             <Label className='form-label required' for='email'>
-              Reason
+              Remarks 
             </Label>  
             <Input type='textarea' rows='3' id='reason' value={reason}  onChange={event => setReason(event.target.value)}/>          
              </div>         
-  </ModalBody>
+         </ModalBody>
         <ModalFooter>
           <Button color='primary' onClick={() => cancelProduct()} >           
             Cancel
