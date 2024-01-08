@@ -64,6 +64,8 @@ const Reasons = () => {
             <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{index + 1}</h6>
           </div>
  )
+
+ 
       }
     },
     {
