@@ -32,11 +32,11 @@ const ProductCancel = () => {
 
   const getCancelledProducts = () => {
     setCancelledProducts([
-      { id: '1', imei_no: '3539061123213123', product_name: 'iPhone 11 Pro', brand: 'Apple', reason: 'Loss', purchase_amount: '100000', servify_amount: '5000', vat_amount: '200', details: 'damage', reasons: 'Display not working', user:'#001', date:'01/12/2024', time:'11:24AM' },
-      { id: '2', imei_no: '3539061123213145', product_name: 'Nokia RT 800 ', brand: 'Nokia', reason: 'Loss', purchase_amount: '50000', servify_amount: '2000 ', vat_amount: '100', details: 'loss', reasons:  'Fault in screen', user:'#002', date:'01/12/2024',  time:'1:24PM' },
-      { id: '3', imei_no: '4984061123213123', product_name: 'Redmi 8A Dual', brand: 'MI', reason: 'Loss', purchase_amount: '20000 ', servify_amount: '1000', vat_amount: '200', details: 'damage', reasons: 'Over hanging', user:'#003', date:'01/12/2024',  time:'5:00PM'  },
-      { id: '4', imei_no: '8722161123213123', product_name: 'Samsung Galaxy 2', brand: 'Samsung', reason: 'Loss', purchase_amount: '10000', servify_amount: '3000', vat_amount: '300', details: 'loss', reasons: 'Not working', user:'#004', date:'01/12/2024',  time:'1:24AM'  },
-      { id: '5', imei_no: '351906112321343', product_name: 'OPPO V 8', brand: 'OPPO', reason: 'Loss', purchase_amount: '40000', servify_amount: '4000', vat_amount: '503', details: 'damage', reasons: 'Display bug', user:'#005', date:'01/12/2024',  time:'11:48PM' }
+      { id: '1', imei_no: '3539061123213123', product_name: 'iPhone 11 Pro', brand: 'Apple', reason: 'Loss', purchase_amount: '1,00000', servify_amount: '5,000', vat_amount: '200', details: 'damage', reasons: 'Display not working', user:'#001', date:'01/12/2024', time:'11:24AM' },
+      { id: '2', imei_no: '3539061123213145', product_name: 'Nokia RT 800 ', brand: 'Nokia', reason: 'Loss', purchase_amount: '50,000', servify_amount: '2,000 ', vat_amount: '100', details: 'loss', reasons:  'Fault in screen', user:'#002', date:'01/12/2024',  time:'1:24PM' },
+      { id: '3', imei_no: '4984061123213123', product_name: 'Redmi 8A Dual', brand: 'MI', reason: 'Loss', purchase_amount: '20,000 ', servify_amount: '1,000', vat_amount: '200', details: 'damage', reasons: 'Over hanging', user:'#003', date:'01/12/2024',  time:'5:00PM'  },
+      { id: '4', imei_no: '8722161123213123', product_name: 'Samsung Galaxy 2', brand: 'Samsung', reason: 'Loss', purchase_amount: '10,000', servify_amount: '3,000', vat_amount: '300', details: 'loss', reasons: 'Not working', user:'#004', date:'01/12/2024',  time:'1:24AM'  },
+      { id: '5', imei_no: '351906112321343', product_name: 'OPPO V 8', brand: 'OPPO', reason: 'Loss', purchase_amount: '40,000', servify_amount: '4,000', vat_amount: '503', details: 'damage', reasons: 'Display bug', user:'#005', date:'01/12/2024',  time:'11:48PM' }
     ])
 
     setProductList([
@@ -133,7 +133,7 @@ const ProductCancel = () => {
       name: 'User id',
       sortable: true,
       minWidth: '90px',
-      id: 'purchase_amount',
+      id: 'user_id',
       selector: (row) => row.user,
       cell: (row) => {
         return (
@@ -151,6 +151,7 @@ const ProductCancel = () => {
     {
       name: 'Total Amount',
       sortable: true,
+      right:true,
       minWidth: '90px',
       id: 'purchase_amount',
       selector: row => row.purchase_amount,
@@ -371,7 +372,7 @@ const ProductCancel = () => {
             />
           </div>
             <div className='mb-2'>
-            <Label className='form-label required' for='email'>
+            <Label className='form-label' for='email'>
               Remarks 
             </Label>  
             <Input type='textarea' rows='3' id='reason' value={reason}  onChange={event => setReason(event.target.value)}/>          
