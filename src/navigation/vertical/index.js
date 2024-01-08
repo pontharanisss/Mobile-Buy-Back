@@ -4,6 +4,7 @@ import forms from './forms'
 import inward from './inward'
 import Sales from './sales'
 import Stock from './stock'
+import masters from './masters'
 import Products from './products'
 import reasons from './reasons'
 
@@ -12,4 +13,4 @@ import reasons from './reasons'
 // import Masters from './masters'
 
 // ** Merge & Export
-export default [...forms, ...inward, ...Sales, ...Stock, ...Products, ...reasons]
+export default [...forms, ...masters, ...inward, ...Sales, ...Stock, ...reasons, ...Products]
