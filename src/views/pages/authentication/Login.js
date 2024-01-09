@@ -10,7 +10,7 @@ import { useSkin } from '@hooks/useSkin'
 
 // ** Third Party Components
 import toast from 'react-hot-toast'
-// import { useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 // import {  useForm, Controller } from 'react-hook-form'
 import { Coffee, X } from 'react-feather'
 
@@ -19,7 +19,7 @@ import { Coffee, X } from 'react-feather'
 // import axios from 'axios'
 import { api } from '../../../utility/constants'
 // // ** Actions
-// import { handleLogin } from '@store/authentication'
+import { handleLogin } from '@store/authentication'
 
 // ** Context
 import { AbilityContext } from '@src/utility/context/Can'
@@ -39,7 +39,7 @@ import triosLogo from '@src/assets/images/logo/trio-s_logo.png'
 const Login = () => {
   // ** Hooks
   const { skin } = useSkin()
-  // const dispatch = useDispatch() 
+  const dispatch = useDispatch() 
   const navigate = useNavigate()
   
   // const ability = useContext(AbilityContext)
@@ -63,43 +63,24 @@ const Login = () => {
     }
     try {
      await fetch(
-        `${api.api_url}/login/loginJwt`,
+        `${api.api_url}/login/login`,
         requestOptions
       )
         .then((res) => res.json())
         .then((json) => {
           let status = 0
           status = json ? (json.body ? json.body.status : 0) : 0
+          setisApiCall(false)
           if (status === 200) {
-            const token = json ? (json.body ? json.body.token : "") : ""
-            const listRequestOptions = {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json"
-                // 'Authorization': 'Bearer my-token',
-              },
-              body: JSON.stringify({ jwtToken: token })
-            }
-            // Login API call
-           fetch(
-              `${api.api_url}/login/login`,
-              listRequestOptions
-            )
-              .then((res) => res.json())
-              .then((json) => {
-                let status = 0
-                status = json ? (json.body ? json.body.status : 0) : 0
-                setisApiCall(false)
-                if (status === 200) {
-                  localStorage.setItem('userDetails', JSON.stringify(json.body.UserInfo))
-                    toast.success('Login Sucessfully', {duration: 2000, style:{color:'#000', backgroundColor:'#d7d2d2'}})
-                    
-                   navigate('/process')
-                }  else {
-                  toast.error('Username or password is incorrect', { duration: 2000, style:{color:'#000', backgroundColor:'#d7d2d2'} })
-                }
-              })
+            console.log(json.body, 'json.body.UserInfo')
+            localStorage.setItem('userDetails', JSON.stringify(json.body.UserInfo))
+              toast.success('Login Sucessfully', {duration: 2000, style:{color:'#000', backgroundColor:'#d7d2d2'}})
+              dispatch(handleLogin(json.body.UserInfo))
+              navigate('/process')
+          }  else {
+            toast.error('Username or password is incorrect', { duration: 2000, style:{color:'#000', backgroundColor:'#d7d2d2'} })
           }
+         
         })
 
     } catch (error) {
@@ -117,10 +98,8 @@ const Login = () => {
       // alert('Please enter the user name')
       setErrors({...errors, passworddata:true})
     } else {
-      setErrors({...errors, username:false, passworddata:false}) 
-      localStorage.setItem('userDetails', JSON.stringify({user_id:'001'}))
-      navigate('/process')    
-     await loginAPI()
+      setErrors({...errors, username:false, passworddata:false})       
+      await loginAPI()
     }
   }
  

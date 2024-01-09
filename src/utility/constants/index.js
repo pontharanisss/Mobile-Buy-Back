@@ -2,7 +2,8 @@ export const api = {
   // api_url: 'http://192.168.1.222:8081/api'
  //api_url: 'http://172.16.1.250:7778/api'
 
-api_url: 'https://sskapi.trio-s.com/api'
+// api_url: 'https://sskapi.trio-s.com/api'
+api_url: 'http://localhost:8081/api'
 }
 export const Common_variable = {
     Save: 'Save',
@@ -100,7 +101,7 @@ export const USER = {
     NEWPASSWORD_ERROR: 'Please enter password',
     CONFORMPASSWORD_ERROR: 'Please enter confrim password',
     EQUALCONFORMPASSWORD_ERROR: 'password and conform password dose not match',
-    EMPLOYEENAME_VALIDATION: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$/,
+    NAME_VALIDATION: /^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$/,
     USERNAME_VALIDATION: /^[a-zA-Z0-9]+$/,
     EMPLOYEENAME_VALIDATIONERROR: 'Please enter valid employee name',
     USERNAME_VALIDATIONERROR: 'Please enter valid user name',
