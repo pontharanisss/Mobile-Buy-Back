@@ -37,7 +37,6 @@ const Reasons = () => {
 
 
   const closeCancelProduct = () => {
-   
     setReason('')
     setProductCancelModal(!productCancelModal)
   }
@@ -177,54 +176,54 @@ return (
           <CardTitle tag='h4'>Reason</CardTitle>
         </CardHeader>
         <CardBody>
-          <div className='invoice-list-table-header w-100 py-2'>
-            <Row className='align-items-center'>
-              <Col lg='2'>
-                <div className='d-flex align-items-center'>
-                  <label htmlFor='rows-per-page' className='me-2'>Show</label>
-                  <Input
-                    type='select'
-                    id='rows-per-page'
-                    className='form-control'
-                    style={{ width: '60px' }}
-                  >
-                    <option value='10'>10</option>
-                    <option value='25'>25</option>
-                    <option value='50'>50</option>
-                  </Input>
-                </div>
-              </Col>
-              <Col lg='3'>
-              <div className='d-flex align-items-center'>
-                  <label htmlFor='rows-per-page' className='me-2'>Status</label>
-                <Select
-                  isClearable={false}
-                  options={statusMasterList}
-                  className='d-flex align-items-center'
-                  value={statusMasterList.find((e) => e.value === statusValue)}
-                  onChange={(e) => handleStatusValue(e.value)}
-                />
-                 </div>
-              </Col>
-              <Col lg='2'>
-              <div className='d-flex align-items-center'>
-                  <Button onClick={() => openModal(false)} color='primary'>Add</Button>
-                </div>
-              </Col>
-              <Col lg='5'>
-                <div className='d-flex align-items-center'>
-                  <label htmlFor='search-invoice' className='me-2'>Search</label>
-                  <Input
-                    id='search-invoice'
-                    className='form-control w-100'
-                    type='text'
-                    placeholder='Search'
-                  />
-                </div>
-              </Col>
-            </Row>
-          </div>
-        </CardBody>
+  <div className='invoice-list-table-header w-100 py-2'>
+    <Row className='align-items-center'>
+      <Col lg='2'>
+        <div className='d-flex align-items-center'>
+          <label htmlFor='rows-per-page' className='me-2'>Show</label>
+          <Input
+            type='select'
+            id='rows-per-page'
+            className='form-control'
+            style={{ width: '60px' }}
+          >
+            <option value='10'>10</option>
+            <option value='25'>25</option>
+            <option value='50'>50</option>
+          </Input>
+        </div>
+      </Col>
+      <Col lg='3'>
+        <div className='d-flex align-items-center'>
+          <label htmlFor='rows-per-page' className='me-2'>Status</label>
+          <Select
+            isClearable={false}
+            options={statusMasterList}
+            className='d-flex align-items-center'
+            value={statusMasterList.find((e) => e.value === statusValue)}
+            onChange={(e) => handleStatusValue(e.value)}
+          />
+        </div>
+      </Col>
+      <Col lg='2' style={{ margin: '-5px 0 0 -50px' }}>
+        <div className='d-flex align-items-center'>
+          <Button onClick={() => openModal(false)} color='primary'>Add</Button>
+        </div>
+      </Col>
+      <Col lg='4'>
+        <div className='d-flex align-items-center'>
+          <label htmlFor='search-invoice' className='me-2'>Search</label>
+          <Input
+            id='search-invoice'
+            className='form-control w-100'
+            type='text'
+            placeholder='Search'
+          />
+        </div>
+      </Col>
+    </Row>
+  </div>
+</CardBody>
         <CardBody className='invoice-padding' style={{paddingTop:'0px', paddingBottom:'3%'}}>
         <div className='sc-dmctIk fuLPYh react-dataTable'>
           <DataTable
@@ -287,7 +286,7 @@ return (
           </Button>
         </ModalFooter>
       </Modal>
-  <Modal isOpen={deleteModal} toggle={() => setDeleteModal(!deleteModal)} 
+      <Modal isOpen={deleteModal} toggle={() => setDeleteModal(!deleteModal)} 
         className='vertically-centered-modal' fade={false}>
           <ModalHeader toggle={() => setDeleteModal(!deleteModal)}>Confirmation</ModalHeader>
           <ModalBody>

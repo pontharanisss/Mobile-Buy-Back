@@ -220,7 +220,6 @@ const ProductCancel = () => {
     setSelectedReason(data)
   }
 
-  
   return (
     <div className="cancelled-products-list-wrapper">
       <Card>
@@ -267,8 +266,7 @@ const ProductCancel = () => {
                   <Button onClick={() => AddCancelProduct()} color='primary'>Add</Button>
                 </div>
               </Col>
-              <Col
-                lg='4'
+              <Col lg='4'
                 className='actions-right d-flex align-items-center justify-content-lg-end flex-lg-nowrap flex-wrap mt-lg-0 mt-1 pe-lg-1 p-0'
               >
                 <div className='d-flex align-items-center'>
@@ -300,8 +298,7 @@ const ProductCancel = () => {
             // onSelectedRowsChange={handleChange}
           />
           </div>
-          
-        </CardBody>
+         </CardBody>
       </Card>
       <Modal isOpen={productCancelModal} toggle={() => setProductCancelModal(!productCancelModal)}
         className='vertically-centered-modal' fade={false}>
