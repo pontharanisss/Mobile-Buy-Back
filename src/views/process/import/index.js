@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import { ChevronDown } from "react-feather"
 import DataTable from "react-data-table-component"
 import { Button, Card, Col, Row, CardBody } from "reactstrap"
@@ -9,7 +9,9 @@ import { toast } from 'react-hot-toast'
 import UILoader from "@components/ui-loader"
 import '../../../assets/style/style.css'
 import PerfectScrollbar from 'react-perfect-scrollbar'
-
+import { getUserData } from '@utils'
+import { importProduct, handleStatusFlag } from '../store'
+import { useDispatch, useSelector } from 'react-redux'
 
 const TotalRecordsCard = ({ totalRecords }) => {
   return (
@@ -64,6 +66,23 @@ const Import = () => {
   const [tableData, setTableData] = useState([])
   const [loading, setLoading] = useState(false)
   const fileInputRef = useRef(null)
+  const user = getUserData()
+  const dispatch = useDispatch()
+  const store = useSelector(state => state.Process)
+
+  useEffect(() => {
+    console.log(store.statusFlag, 'statusFlag')
+    if (store.statusFlag === 1) {
+      setLoading(false)
+      dispatch(handleStatusFlag(0))
+       toast.success(store.message, { duration: 2000, style:{color:'#000', backgroundColor:'#d7d2d2'} })     
+    } else if (store.statusFlag === 2) {
+      setLoading(false)
+      dispatch(handleStatusFlag(0)) 
+      toast.error(store.message, { duration: 2000, style:{color:'#000', backgroundColor:'#d7d2d2'} })
+    }
+  }, [store.statusFlag])
+
 
   const handleSort = () => {
     // Define sorting logic here
@@ -77,7 +96,14 @@ const Import = () => {
 
   const onSubmit = () => {
     // Submit logic here
-    setLoading(false)
+    setLoading(true)
+    dispatch(
+      importProduct({
+        user_id: user && user.id,
+        import_data: tableData ? tableData : []
+      })
+    ) 
+    
   }
 
   const onFileChange = (e) => {
@@ -127,7 +153,8 @@ const Import = () => {
   }))
 
   return (
-    <div className="invoice-list-wrapper">
+    <UILoader blocking={loading}>
+    <div className="invoice-list-wrapper">     
       <Card>
         <div className="invoice-list-dataTable">
           <div className="datatable-header header sticky">
@@ -154,10 +181,10 @@ const Import = () => {
           </div>
         </div>
       </Card>
-
+      
       <input type="file" ref={fileInputRef} style={{ display: "none" }} onChange={onFileChange} />
-      {loading && <UILoader />}
-    </div>
+      
+    </div></UILoader>
   )
 }
 

@@ -12,7 +12,7 @@ import Select from 'react-select'
 import InputPasswordToggle from '@components/input-password-toggle'
 import { USER, Common_variable } from '../../../utility/constants'
 import { getUserData } from '@utils'
-import { getData, getmaster, saveData, handleStatusFlag } from './store'
+import { getData, getmaster, saveData, handleStatusFlag, deleteData, resetData } from './store'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from "react-hot-toast"
 import UILoader from '@components/ui-loader'
@@ -21,6 +21,7 @@ import UILoader from '@components/ui-loader'
 const UserMaster = () => {
   // ** Store vars
   // const navigate = useNavigate()
+  const crypto = require('crypto')
   const user = getUserData()
   const dispatch = useDispatch()
   const store = useSelector(state => state.UsersData)
@@ -43,6 +44,16 @@ const UserMaster = () => {
   const [btntrigger, SetBtnTrigger] = useState('')
   const [isEdit, setIsEdit] = useState('')
   const [selUserRole, setSelUserRole] = useState('')
+  const [deletetigger, SetDeleteTrigger] = useState('')
+  const [resetPasswordModal, setresetPasswordModal] = useState(false)
+  const [resettigger, SetresetTrigger] = useState('')
+  const [newpassword, setnewpassword] = useState('')
+  const [newpasswordError, SetnewpasswordError] = useState(false)
+  const [resetpasswordError, setresetpasswordError] = useState('')
+  const [userconfirmpassword, setuserconfirmpassword] = useState(false)
+  const [conformpasswordError, SetconformpasswordError] = useState('')
+  const [conformpassword, setconformpassword] = useState(false)
+  const [value, setValue] = useState('')
 
   //Validation
   const userName_validation = USER.USERNAME_VALIDATION
@@ -60,15 +71,141 @@ const UserMaster = () => {
 
   // const user_roles = [{value: 'Admin', label: 'Admin'}, {value: 'User', label: 'User'}]
 
-  
+  // decrypt the password
+  const decryptpassword = function (data) {
+    const algorithm = 'aes-256-ctr'
+    const password = 'd6F3Efeq'
+    const decipher = crypto.createDecipher(algorithm, password)
+    let dec = decipher.update(data, 'hex', 'utf8')
+    dec += decipher.final('utf8')
+    return dec
+  }
+
+  const clearData = () => {
+    setSelUserRole('')
+    SetuserError(false)
+    SetusernameError('')
+    SetUserIdError(false)
+    SetUserIDError('')
+    SetpasswordError(false)
+    SetuserpasswordError('')
+    SetroleError(false)
+    SetuserroleError('')
+  }
   //edit click
-  const editUser = (data) => {    
-    setUserData(data)
+  const editUser = (data) => {  
+    clearData()   
     if (store.userroleList) {
       setSelUserRole(store.userroleList.filter(e => e.value === data.user_role)[0])
     }    
+    const data1 = {...data, ...{password: decryptpassword(data.password)}}
+    setUserData(data1)
     setIsEdit(true)
     setAddUserModal(true)
+  }
+
+  const deleteUserPopup = (data) => {
+    setUserData(data)
+    setDeleteModal(true)
+  }
+
+  const deleteUser = () => {
+    SetDeleteTrigger('Yes')
+    setloader(true)   
+    dispatch(
+      deleteData({
+        user_id: user && user.id,
+        role_id: user && user.user_role,        
+        delete_user_id: userData && userData.id ? userData.id : ''
+      })
+    )    
+  }
+
+  //resetpassword click
+  const resetPasswordopen = (data) => {
+    setresetPasswordModal(!resetPasswordModal)
+    setUserData(data)
+    setconformpassword(false)
+    SetconformpasswordError('')
+    setnewpassword('')
+    setconformpassword('')
+    setuserconfirmpassword('')
+    SetnewpasswordError(false)
+    setresetpasswordError('')
+  }
+
+  //reset api
+  const resetPassword = (action) => {
+    SetresetTrigger(action)
+    if (newpassword === '') {
+      SetnewpasswordError(true)
+      setresetpasswordError(USER.NEWPASSWORD_ERROR)
+     
+    }  else if (!password_validation.test(newpassword)) {
+      SetnewpasswordError(true)
+      setresetpasswordError(USER.PASSWORD_VALIDATIONERROR)
+      
+    } else {
+      SetnewpasswordError(false)
+      setresetpasswordError('')
+    } 
+    
+    if (userconfirmpassword === '') {
+      setconformpassword(true)
+      SetconformpasswordError(USER.CONFORMPASSWORD_ERROR)
+    }  else if (newpassword !== userconfirmpassword) {
+      setconformpassword(true)
+      SetconformpasswordError(USER.EQUALCONFORMPASSWORD_ERROR)
+    } else {
+      setconformpassword(false)
+      SetconformpasswordError('')
+    } 
+    
+    if (newpassword !== '' && userconfirmpassword !== '' && newpassword === userconfirmpassword && password_validation.test(newpassword)) {
+      SetnewpasswordError(false)
+      setresetpasswordError('')
+      setconformpassword(false)
+      SetconformpasswordError('')
+      setloader(true)   
+      dispatch(
+        resetData({
+          user_id: user && user.id,
+          role_id: user && user.user_role,
+          new_password: newpassword,
+          confirmationpassword: userconfirmpassword,
+          reset_user_id: userData && userData.id ? userData.id : ''
+        })
+      )
+    }
+    
+  }
+
+  const onBlurnewpassword = () => {
+    if (newpassword === '') {
+      SetnewpasswordError(true)
+      setresetpasswordError(USER.NEWPASSWORD_ERROR)
+     
+    }  else if (!password_validation.test(newpassword)) {
+      SetnewpasswordError(true)
+      setresetpasswordError(USER.PASSWORD_VALIDATIONERROR)
+      
+    } else {
+      SetnewpasswordError(false)
+      setresetpasswordError('')
+    }
+  }
+
+  const  onBlurconforpassword = () => {
+    if (userconfirmpassword === '') {
+      setconformpassword(true)
+      SetconformpasswordError(USER.CONFORMPASSWORD_ERROR)
+    }  else if (newpassword !== userconfirmpassword) {
+      setconformpassword(true)
+      SetconformpasswordError(USER.EQUALCONFORMPASSWORD_ERROR)
+    } else {
+      setconformpassword(false)
+      SetconformpasswordError('')
+    }
   }
   
   const columns = [ 
@@ -142,11 +279,11 @@ const UserMaster = () => {
            <UncontrolledTooltip placement='top' target={`edit-tooltip-${row.id}`}>
             Edit
           </UncontrolledTooltip>
-          <Unlock size={14} className='me-50' id={`edit-tooltip-${row.id}`}  />
+          <Unlock size={14} className='me-50' id={`edit-tooltip-${row.id}`}  onClick={() => resetPasswordopen(row)}/>
           <UncontrolledTooltip placement='top' target={`edit-tooltip-${row.id}`}>
             Reset Password
           </UncontrolledTooltip>       
-          <Trash size={14} className='me-50' id={`delete-tooltip-${index}`} onClick={() => setDeleteModal(true)}/>
+          <Trash size={14} className='me-50' id={`delete-tooltip-${index}`} onClick={() => deleteUserPopup(row)}/>
           <UncontrolledTooltip placement='top' target={`delete-tooltip-${index}`}>
             Delete
         </UncontrolledTooltip>
@@ -160,14 +297,14 @@ const UserMaster = () => {
     setloader(true)
     dispatch(
       getmaster({
-        user_id: 2,
-        role_id:1
+        user_id: user && user.id,
+        role_id: user && user.user_role
       })
     )
     dispatch(
       getData({
-        user_id: 2,
-        role_id: 1
+        user_id: user && user.id,
+        role_id: user && user.user_role
       })
     )
   }, [dispatch])
@@ -193,21 +330,44 @@ const UserMaster = () => {
           setAddUserModal(false)
           dispatch(
             getData({
-              user_id: 2,
-              role_id: 1
+              user_id: user && user.id,
+              role_id: user && user.user_role
             })
           )
         }      
       }
+      if (deletetigger !== '') {
+        toast.success(store.message, { duration: 2000, style:{color:'#000', backgroundColor:'#d7d2d2'} })
+        setDeleteModal(false)
+        dispatch(
+          getData({
+            user_id: user && user.id,
+            role_id: user && user.user_role
+          })
+        )
+        if (deletetigger === 'Yes') {
+          SetDeleteTrigger('')
+          }
+      }
+      if (resettigger !== '') {
+        toast.success(store.message, { duration: 2000, style:{color:'#000', backgroundColor:'#d7d2d2'} })
+        setresetPasswordModal(false)
+      if (resettigger === 'Save') {
+        SetresetTrigger('')
+        }
+      }
+      setValue('')
     } else if (store.statusFlag === 2) {
       setloader(false)
       dispatch(handleStatusFlag(0)) 
+      setValue('')
       toast.error(store.message, { duration: 2000, style:{color:'#000', backgroundColor:'#d7d2d2'} })
     }
   }, [dispatch, store.data.length, store.statusFlag])
 
   // add click
   const AddUser = () => {
+    clearData() 
     setUserData('')
     setIsEdit(false)
     setAddUserModal(!addUserModal)
@@ -267,16 +427,18 @@ const UserMaster = () => {
 
     console.log(user, userData, 'userData')
 
-    if (!has_error) {       
+    if (!has_error) {    
+      setloader(true)   
       dispatch(
         saveData({
-          user_id: 2,
-          role_id:1,
+          user_id: user && user.id,
+          role_id: user && user.user_role,
           user_name: userData && userData.user_name ? userData.user_name : '',
-          user_role: userData && userData.user_role ? userData.user_role.role_id : '',
+          user_role: userData && userData.user_role ? userData.user_role : '',
           password: userData && userData.password ? userData.password : '',
           new_user_id: userData && userData.user_id ? userData.user_id : '',
-          process_type: action
+          process_type: action,
+          update_user_id: userData && userData.id ? userData.id : ''
         })
       )
     }
@@ -323,8 +485,8 @@ const UserMaster = () => {
   }
 
   const onchangeUserRole = (e) => {
-    setUserData({...userData, user_role: e})
-    setSelUserRole({...userData, user_role: e})
+    setUserData({...userData, user_role: e.value})
+    setSelUserRole(e)
   }
 
   const onBlurUserRole = () => {
@@ -351,6 +513,19 @@ const UserMaster = () => {
     } else {
       SetpasswordError(false)
       SetuserpasswordError('')
+    }
+  }
+
+  const handleFilter = val => {
+    setValue(val)
+    if (val !== "" && val !== undefined && val !== null) {
+      const array = Object.assign([], store.data)
+      const arraydata = array.filter((e) => e.user_name.toLowerCase().includes(val.toLowerCase()) ||
+        e.user_id.toLowerCase().includes(val.toLowerCase()))
+      setUserList(arraydata)
+    } else {
+      const array = Object.assign([], store.data)     
+      setUserList(array)
     }
   }
 
@@ -389,8 +564,8 @@ const UserMaster = () => {
                 id='search-invoice'
                 className='ms-50 me-2 w-100'
                 type='text'
-                // value={value}
-                // onChange={e => handleFilter(e.target.value)}
+                value={value}
+                onChange={e => handleFilter(e.target.value)}
                 placeholder='Search'
               />
             </div>          
@@ -462,7 +637,7 @@ const UserMaster = () => {
             <Label className='form-label' for='email'>
              Password
             </Label>   
-            <InputPasswordToggle className='input-group-merge'
+            <InputPasswordToggle className='input-group-merge'                       
               id='login-password' maxLength={50} value={userData && userData.password ? userData.password : ''} 
               onBlur={onBlurpassword} onChange={(e) => onchangePassword(e)} /> 
               <span className="errorAlert"> {passwordError === true ? userpasswordError : ''} </span>        
@@ -501,7 +676,7 @@ const UserMaster = () => {
             </div>            
           </ModalBody>
           <ModalFooter>
-            <Button color='primary' onClick={() => setDeleteModal(false)}>
+            <Button color='primary' onClick={() => deleteUser()}>
               Yes
             </Button>{' '}
             <Button color='primary' outline onClick={() => setDeleteModal(false)}>
@@ -509,6 +684,38 @@ const UserMaster = () => {
             </Button>{' '}
           </ModalFooter>
         </Modal>
+
+        <Modal isOpen={resetPasswordModal} toggle={() => setresetPasswordModal(!resetPasswordModal)}
+        className='vertically-centered-modal' fade={false}>
+        <ModalHeader toggle={() => setresetPasswordModal(!resetPasswordModal)}>Reset Password</ModalHeader>
+        <ModalBody>
+          <div className='mb-2'>
+            <Label className='form-label' for='email'>
+              New Password
+            </Label>
+            <InputPasswordToggle className='input-group-merge'
+              id='login-password' value={newpassword}  onBlur={onBlurnewpassword} onChange={(e) => setnewpassword(e.target.value)} />
+            <span style={{ color: 'red', fontSize: '10px' }}> {newpasswordError === true ? resetpasswordError : ''} </span>
+          </div>
+
+          <div className='mb-2'>
+            <Label className='form-label' for='email'>
+              Confirm Password
+            </Label>
+            <InputPasswordToggle className='input-group-merge'
+              id='login-password' value={userconfirmpassword}  onBlur={onBlurconforpassword} onChange={(e) => setuserconfirmpassword(e.target.value)} />
+            {/* {errors && errors.password &&   <FormFeedback className='d-block'>Please Enter password</FormFeedback>} */}
+            <span style={{ color: 'red', fontSize: '10px' }}> {conformpassword === true ? conformpasswordError : ''} </span>
+          </div>
+
+        </ModalBody>
+        <ModalFooter>
+          <Button color='primary' onClick={() => resetPassword('Save')}>
+            Save
+          </Button>{' '}
+
+        </ModalFooter>
+      </Modal>
     
     </div>
   )

@@ -1,6 +1,6 @@
 // ** Redux Imports
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { getMyIpAddress } from '../../../../utility/commonfunc'
+// import { getMyIpAddress } from '../../../../utility/commonfunc'
 // ** Axios Imports
 import axios from 'axios'
 import { api } from '../../../../utility/constants'
@@ -23,7 +23,9 @@ export const getData = createAsyncThunk('UserMaster/getData', async param => {
 })
 // saveData Api
 export const saveData = createAsyncThunk('UserMaster/saveData', async params => {
-  const response1 = await axios.post(`${api.api_url}/master/saveUserData`, params)
+  const user = getUserData()
+  const config = { headers: { authorization: 'Bearer '.concat(user.accessToken) }}  
+  const response1 = await axios.post(`${api.api_url}/master/saveUserData`, params, config)
   if (response1 && response1.data && response1.data.body) { 
     return { 
       statusFlag:response1.data.body.statusFlag, 
@@ -32,57 +34,23 @@ export const saveData = createAsyncThunk('UserMaster/saveData', async params => 
   } 
 })
 //delete Api 
-export const deleteData = createAsyncThunk('UserMaster/deleteData', async params => {
- 
-  params = {...params, ...{ipaddress:await getMyIpAddress()}}
- 
-  const response = await axios.post(`${api.api_url}/userMaster/deleteusersJwt`, params) 
-  if (response && response.data && response.data.body && response.data.body.token) {
-    
-      params = {...params, ...{jwtToken:response.data.body.token}}
-      
-   const response1 = await axios.post(`${api.api_url}/userMaster/deleteusers`, params)
+export const deleteData = createAsyncThunk('UserMaster/deleteData', async params => { 
+  const user = getUserData()
+  const config = { headers: { authorization: 'Bearer '.concat(user.accessToken) }}       
+   const response1 = await axios.post(`${api.api_url}/master/deleteUserData`, params, config)
    if (response1 && response1.data && response1.data.body) { 
-    return {
-     
-      statusFlag:response1.data.statusFlag,
-      
-      message:response1.data.message
-    }
-   } else {
+    return {     
+      statusFlag:response1.data.body.statusFlag,      
+      message:response1.data.body.message
+    }   
+  } 
+})
 
-   }
-   
-  } else {
-    return {
-      statusFlag:response.data.statusFlag,
-      message:response.data.message
-    }
-   }
-})
-//updateData api
-export const updateData = createAsyncThunk('UserMaster/updateData', async params => { 
-  params = {...params, ...{ipaddress:await getMyIpAddress()}}
-  const response = await axios.post(`${api.api_url}/userMaster/updateusersJwt`, params) 
-  if (response && response.data && response.data.body && response.data.body.token) { 
-      params = {...params, ...{jwtToken:response.data.body.token}} 
-    const response1 = await axios.post(`${api.api_url}/userMaster/updateusers`, params)
-    if (response1 && response1.data && response1.data.body) { 
-      return { 
-        statusFlag:response1.data.statusFlag, 
-        message:response1.data.message
-      } 
-   }   
-  } else {
-    return {
-      statusFlag:response.data.statusFlag,
-      message:response.data.message
-    }
-   }
-})
 //getmaster Api  for dropdown
 export const getmaster = createAsyncThunk('UserMaster/getmaster', async params => {
-  const response1 = await axios.post(`${api.api_url}/master/getMasterData`, params)  
+  const user = getUserData()
+  const config = { headers: { authorization: 'Bearer '.concat(user.accessToken) }}
+  const response1 = await axios.post(`${api.api_url}/master/getMasterData`, params, config)  
    if (response1 && response1.data && response1.data.body) {
         return {
             userroleList: response1.data.body.userroleList     
@@ -92,26 +60,17 @@ export const getmaster = createAsyncThunk('UserMaster/getmaster', async params =
 
 //reset api
 export const resetData = createAsyncThunk('UserMaster/resetData', async params => {
-  console.log(params)
-  params = {...params, ...{ipaddress:await getMyIpAddress()}}
-  const response = await axios.post(`${api.api_url}/userMaster/resetpasswordJwt`, params)
-  
-  if (response && response.data && response.data.body && response.data.body.token) {
-    
-      params = {...params, ...{jwtToken:response.data.body.token}}
-      
-   const response1 = await axios.post(`${api.api_url}/userMaster/resetpassword`, params)
+  const user = getUserData()
+  const config = { headers: { authorization: 'Bearer '.concat(user.accessToken) }}
+  const response1 = await axios.post(`${api.api_url}/master/resetPassword`, params, config)      
    
    if (response1 && response1.data && response1.data.body) {
     return {
-      statusFlag:response1.data.statusFlag,
-      message:response1.data.message
-   }
-   } else {
-
-   }
-   
+      statusFlag:response1.data.body.statusFlag,
+      message:response1.data.body.message
+   }   
   }
+
 })
 export const UserMasterSlice = createSlice({
   name: 'UserMaster',
@@ -144,10 +103,7 @@ export const UserMasterSlice = createSlice({
       state.statusFlag = action.payload.statusFlag
       state.message = action.payload.message
     })
-    .addCase(updateData.fulfilled, (state, action) => {
-      state.statusFlag = action.payload.statusFlag
-      state.message = action.payload.message
-    })
+    
     .addCase(getmaster.fulfilled, (state, action) => {
       state.userroleList = action.payload.userroleList     
       state.message = action.payload.message

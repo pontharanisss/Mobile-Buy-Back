@@ -12,6 +12,7 @@ import ecommerce from '@src/views/apps/ecommerce/store'
 import dataTables from '@src/views/tables/data-tables/store'
 import permissions from '@src/views/apps/roles-permissions/store'
 import UsersData from '@src/views/masters/userMaster/store'
+import Process from '@src/views/process/store'
 
 const rootReducer = {
   auth,
@@ -26,7 +27,8 @@ const rootReducer = {
   ecommerce,
   dataTables,
   permissions,
-  UsersData
+  UsersData,
+  Process
 }
 
 export default rootReducer
