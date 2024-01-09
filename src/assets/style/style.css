@@ -267,8 +267,3 @@ th, td {
   justify-content: center;
   margin-left: -20px;
 }
-
-.errorAlert {
-  color: red !important; 
-  font-size: 10px;
-}
