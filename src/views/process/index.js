@@ -10,7 +10,7 @@ import Flatpickr from 'react-flatpickr'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 import '@styles/base/pages/app-invoice.scss'
-import { handleStatusFlag, gettransitList } from './store'
+import { handleStatusFlag, gettransitList, currentTransactionDetails } from './store'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUserData } from '@utils'
 import UILoader from "@components/ui-loader"
@@ -27,13 +27,9 @@ const ImportList = () => {
   const user = getUserData()
   const dispatch = useDispatch()
   const store = useSelector(state => state.Process)
-  
-  // const getTransactionList = () => {
-  //   setTransactionList([{ id: '1', transaction_no:'2000', date: '01-01-2024 10:30 AM', total_products: 10, userId: '0765'}, { id: '2', transaction_no:'2001', date: '01-01-2024 12:00 PM', total_products: 20, userId: '09871' }, { id: '3', transaction_no:'3040', date: '02-01-2024 1:00 AM', total_products: 25, userId: '0922' }, { id: '4', transaction_no:'4009', date: '02-01-2024 4:30 PM', total_products: 30, userId: '0034'}, { id: '5', transaction_no:'5093', date: '04-01-2024 6:00 PM', total_products: 40, userId: '001' }])
-  // }
-
+  const [value, setValue] = useState('')
+  //Initial gettransitlist when page load
   useEffect(() => {
-    // getTransactionList()
     setLoading(true)
     dispatch(
       gettransitList({
@@ -44,26 +40,33 @@ const ImportList = () => {
     ) 
   }, [])
 
-  
+  //After api call success stop loading
   useEffect(() => {
     if (store.statusFlag === 1) {
+      setValue('')
       setLoading(false)
       dispatch(handleStatusFlag(0))
     } else if (store.statusFlag === 2) {
+      setValue('')
       setLoading(false)
       dispatch(handleStatusFlag(0)) 
     }
   }, [store.statusFlag])
 
-    useEffect(() => {
-    if (store.transitList && store.transitList.length > 0) {
-      setTransactionList(store.transitList)
-    }
+  //set store values to state values
+  useEffect(() => {
+  if (store.transitList && store.transitList.length > 0) {
+    setTransactionList(store.transitList)
+  }
   }, [store.transitList])
 
-   const viewtransaction_details = () => {
+  //view transaction details
+  const viewtransaction_details = (row) => {
+    dispatch(currentTransactionDetails(row)) 
     navigate('/process/viewTransactiondetails')
   }
+  
+  //Define tables columns
   const columns = [ 
     {
       name: 'S.No.',
@@ -82,7 +85,7 @@ const ImportList = () => {
     {
       name: 'Transaction No.',
       sortable: true,
-      minWidth: '50px',
+      minWidth: '10px',
       id: 'id',
       cell: (row)  => {
         return (
@@ -94,7 +97,7 @@ const ImportList = () => {
       }
     },
     {
-      name: 'Date',
+      name: 'Transaction Date',
       sortable: true,
       minWidth: '150px',
       id: 'date',
@@ -117,7 +120,10 @@ const ImportList = () => {
       cell: (row) => {
         return (
           <div className='justify-content-left align-items-center paddingtop-1'>
-            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{'#'}{row.user_id}</h6>
+            <h6 className='user-name text-truncate mb-0 wraptext'>{row.user_name}</h6>
+            <span style={{ fontSize: '10px' }}>
+            {'#'}{row.user_id}
+            </span>
           </div>
 
         )
@@ -126,7 +132,7 @@ const ImportList = () => {
     {
       name: 'Total Products',
       sortable: true,
-      minWidth: '200px',
+      minWidth: '100px',
       id: 'total_products',
       selector: row => row.total_products,
       cell: row => {
@@ -152,6 +158,30 @@ const ImportList = () => {
     }
   ]
   
+  //gettransitList for particular date
+  const gettransitListData = () => {
+    setLoading(true)
+    dispatch(
+      gettransitList({
+        user_id: user && user.id,
+        fromdate: toDate ? moment(new Date(fromDate)).format("YYYY-MM-DD") : '',
+        todate: toDate ? moment(new Date(toDate)).format("YYYY-MM-DD") : ''
+      })
+    )
+  }
+
+  const handleFilter = val => {
+    setValue(val)
+    if (val !== "" && val !== undefined && val !== null) {
+      const array = Object.assign([], store.transitList)
+      const arraydata = array.filter((e) => e.user_name.toLowerCase().includes(val.toLowerCase()) ||
+        e.user_id.toLowerCase().includes(val.toLowerCase()))
+      setTransactionList(arraydata)
+    } else {
+      const array = Object.assign([], store.transitList)     
+      setTransactionList(array)
+    }
+  }
 
   return (
     <UILoader blocking={loading}>
@@ -202,7 +232,7 @@ const ImportList = () => {
                 />
               </div> 
               <div style={{marginRight: '2%', marginTop: '1.5%'}}>
-              <Button color='primary'>
+              <Button color='primary' onClick={() => gettransitListData()}>
                 Show
               </Button></div>
               </Col>
@@ -213,8 +243,8 @@ const ImportList = () => {
                   id='search-invoice'
                   className='ms-50 me-2 w-100'
                   type='text'
-                  // value={value}
-                  // onChange={e => handleFilter(e.target.value)}
+                  value={value}
+                  onChange={e => handleFilter(e.target.value)}
                   placeholder='Search'
                 />
               </div>          

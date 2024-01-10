@@ -1,38 +1,75 @@
 // ** React Imports
 import React, { useState, useEffect  } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
-  Card, CardHeader, CardTitle, CardBody, Row, Col, Label, Badge,  Modal, ModalHeader, ModalBody, ModalFooter, Button 
+  Card, CardHeader, CardTitle, CardBody, Row, Col, Label, Badge,  Modal, ModalHeader, ModalBody, ModalFooter, Button, CardFooter 
 } from 'reactstrap'
-import { ChevronDown, Trash  } from 'react-feather'
+import { ChevronDown  } from 'react-feather'
 import DataTable from 'react-data-table-component'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 import '@styles/base/pages/app-invoice.scss'
-import Select from 'react-select'
 import '../../assets/style/style.css'
+import { viewTransactionDetails, handleStatusFlag } from './store'
+import { useDispatch, useSelector } from 'react-redux'
+import { getUserData } from '@utils'
+import UILoader from "@components/ui-loader"
 
 const TransactionDetails = () => {
   // ** Store vars
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
   const [cancelledProducts, setCancelledProducts] = useState([])
   const [showImeipopup, setShowImeipopup] = useState(false)
+  const [transactionNo, setTransactionNo] = useState(false)
+  const [totalProducts, setTotlaProducts] = useState(false)
+  const [transactionDate, setTransactionDate] = useState(false)
   const [imeidetails, setImeidetails] = useState('')
-  // const viewSales = () => {
-  //   navigate('/transaction/sales/add')
-  // }
-
-  const getCancelledProducts = () => {
-    setCancelledProducts([{ id: '1', imei_no: '3539061123213123', product_name: 'iPhone 11 Pro', brand: 'Apple', reason: 'Speak Damage', purchase_amount: '100000', status: 'Pending', servify_amount: '5000', vat_amount: '200' }, { id: '1', imei_no: '3539061123213145', product_name: 'Nokia RT 800 ', brand: 'Nokia', reason: 'Old Model', purchase_amount: '50000', servify_amount: '2000 ', vat_amount: '100', status: 'Sold' }, { id: '1', imei_no: '4984061123213123', product_name: 'Redmi 8A Dual', brand: 'MI', reason: 'Over Heating', purchase_amount: '20000 ', servify_amount: '1000', vat_amount: '200', status: 'Sold' }, { id: '1', imei_no: '8722161123213123', product_name: 'Samsung Galaxy 2', brand: 'Samsung', reason: 'Display not good', purchase_amount: '10000', servify_amount: '3000', vat_amount: '300', status: 'Cancelled' }, { id: '1', imei_no: '351906112321343', product_name: 'OPPO V 8', brand: 'OPPO', reason: 'Headset damage', purchase_amount: '40000', servify_amount: '4000', vat_amount: '503', status: 'Pending' }])
-  }
+  const [loading, setLoading] = useState(false)
+  const user = getUserData()
+  const dispatch = useDispatch()
+  const store = useSelector(state => state.Process)
+  
 
   useEffect(() => {
-    getCancelledProducts()
-  }, [])
+    console.log(store.currentTransactionDetails, 'currentTransactionDetails')
+    if (store.currentTransactionDetails && store.currentTransactionDetails.transaction_no) {
+      setTotlaProducts(store.currentTransactionDetails.tot_product)
+      setTransactionDate(store.currentTransactionDetails.transaction_date)
+      setTransactionNo(store.currentTransactionDetails.transaction_no)
+      setLoading(true)
+      dispatch(
+        viewTransactionDetails({
+          user_id: user && user.id,
+          transaction_no: store.currentTransactionDetails.transaction_no
+        })
+      ) 
+    }
+  }, [store.currentTransactionDetails])
+
+  useEffect(() => {
+    if (store.transactionDetails && store.transactionDetails.length > 0) {
+      setCancelledProducts(store.transactionDetails)
+    }    
+  }, [store.transactionDetails])
+
+   //After api call success stop loading
+   useEffect(() => {
+    if (store.statusFlag === 1) {
+      setLoading(false)
+      dispatch(handleStatusFlag(0))
+    } else if (store.statusFlag === 2) {
+      setLoading(false)
+      dispatch(handleStatusFlag(0)) 
+    }
+  }, [store.statusFlag])
 
   const showImeiDetails = (row) => {
     setImeidetails(row)
     setShowImeipopup(!showImeipopup)
   }
 
+  const BacktoList = () => {
+    navigate('/process')
+  }
 
   const columns = [ 
     {
@@ -79,6 +116,9 @@ const TransactionDetails = () => {
         return (
           <div className='justify-content-left align-items-center paddingtop-1'>
             <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.product_name}</h6>
+            <span style={{ fontSize: '10px' }}>
+              {row.sku_attribute}
+            </span>
           </div>
 
         )
@@ -96,27 +136,13 @@ const TransactionDetails = () => {
       cell: row => {
         return (
           <div className='justify-content-left  paddingtop-1'>
-            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.brand}</h6>
+            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.brand_name}</h6>
           </div>
 
         )
       }
     }, 
-    {
-      name: 'Reason',
-      sortable: true,
-      minWidth: '200px',
-      center: true.valueOf,
-      id: 'reason',
-      selector: row => row.reason,
-      cell: row => {
-        return (
-          <div className='justify-content-left align-items-center paddingtop-1'>
-            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.reason}</h6>
-          </div>          
-        )
-      }
-    }, 
+    
     {
       name: 'Purchase Amount',
       sortable: true,
@@ -150,7 +176,7 @@ const TransactionDetails = () => {
       }
     },   
     {
-      name: 'VAT',
+      name: 'GST',
       sortable: true,
       minWidth: '200px',
       right:true,
@@ -159,7 +185,7 @@ const TransactionDetails = () => {
       cell: row => {
         return (
           <div className='justify-content-right align-items-center paddingtop-1'>
-            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.vat_amount}</h6>
+            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.gst}</h6>
           </div>
 
         )
@@ -169,6 +195,7 @@ const TransactionDetails = () => {
 
   
   return (
+    <UILoader blocking={loading}>
     <div className="invoice-list-wrapper">
       <Card>
         <CardHeader className='border-bottom'>
@@ -179,21 +206,21 @@ const TransactionDetails = () => {
             <Col className='mt-md-0 mt-3' xl={'4'}>
               <div className='d-flex align-items-center mb-1'>
                 <Label className='form-labels' style={{fontWeight: '600', fontSize: '1.3rem'}}>
-                  Transaction No: <span>#20001</span>
+                  Transaction No: <span>#{transactionNo}</span>
                 </Label>
               </div>
             </Col>
             <Col className='mt-md-0 mt-3'  xl={'4'}>
               <div className='d-flex align-items-center mb-1'>
                 <Label className='form-labels' style={{fontWeight: '600', fontSize: '1.3rem'}}>
-                  Transaction Date: 01-01-2024
+                  Transaction Date: {transactionDate}
                 </Label>
               </div>
             </Col>
             <Col className='mt-md-0 mt-3'  xl={'4'}>
               <div className='d-flex align-items-center mb-1'>
                 <Label className='form-labels' style={{fontWeight: '600', fontSize: '1.3rem'}}>
-                  Total Products: 30
+                  Total Products: {totalProducts}
                 </Label>
               </div>
             </Col>
@@ -217,6 +244,11 @@ const TransactionDetails = () => {
           </div>
           
         </CardBody>
+        <CardBody style={{textAlign: 'right'}}>          
+          <Button color='primary' outline onClick={() => BacktoList()}>
+            Close
+          </Button>
+        </CardBody>
       </Card>  
       <Modal isOpen={showImeipopup} toggle={() => setShowImeipopup(!showImeipopup)} 
         className='vertically-centered-modal' fade={false}>
@@ -236,7 +268,15 @@ const TransactionDetails = () => {
                 Product Name :
               </Label>  </Col>
               <Col sm='6'>
-              <p className='mb-25 font-16'>Redmi 8A</p>  </Col>       
+              <p className='mb-25 font-16'>{imeidetails.product_name}</p>  </Col>       
+            </Row>
+            <Row className='mb-2'> 
+            <Col sm='6'>
+              <Label className='imei_details_label me-1'>
+                SKU Attributes :
+              </Label>  </Col>
+              <Col sm='6'>
+              <p className='mb-25 font-16'>{imeidetails.sku_attribute}</p>   </Col>      
             </Row>
 
             <Row className='mb-2'> 
@@ -245,7 +285,7 @@ const TransactionDetails = () => {
                 Brand :
               </Label> </Col> 
               <Col sm='6'>
-              <p className='mb-25 font-16'>Redmi</p>     </Col>    
+              <p className='mb-25 font-16'>{imeidetails.brand_name}</p>     </Col>    
             </Row>
 
             <Row className='mb-2'> 
@@ -254,7 +294,7 @@ const TransactionDetails = () => {
                 Purchase Amount :
               </Label>  </Col>
               <Col sm='6'>
-              <p className='mb-25 font-16'>20,000</p> </Col>        
+              <p className='mb-25 font-16'>{imeidetails.purchase_amount}</p> </Col>        
             </Row>
             <Row className='mb-2'> 
             <Col sm='6'>
@@ -262,7 +302,7 @@ const TransactionDetails = () => {
                 Servify Fee :
               </Label>  </Col>
               <Col sm='6'>
-              <p className='mb-25 font-16'>1,000</p> </Col>        
+              <p className='mb-25 font-16'>{imeidetails.servify_amount}</p> </Col>        
             </Row>
             <Row className='mb-2'> 
             <Col sm='6'>
@@ -270,25 +310,8 @@ const TransactionDetails = () => {
                 VAT Amount :
               </Label>  </Col>
               <Col sm='6'>
-              <p className='mb-25 font-16'>10</p>   </Col>      
-            </Row>
-
-            <Row className='mb-2'> 
-            <Col sm='6'>
-              <Label className='imei_details_label me-1'>
-                Sales Amount :
-              </Label>  </Col>
-              <Col sm='6'>
-              <p className='mb-25 font-16'>25,000</p></Col>         
-            </Row>  
-            <Row className='mb-2'> 
-            <Col sm='6'>
-              <Label className='imei_details_label me-1'>
-                SKU Attributes :
-              </Label>  </Col>
-              <Col sm='6'>
-              <p className='mb-25 font-16'>Midnight Grey| 4GB</p>   </Col>      
-            </Row>                          
+              <p className='mb-25 font-16'>{imeidetails.gst}</p>   </Col>      
+            </Row>                                      
           </ModalBody>
           <ModalFooter>            
             <Button color='primary' outline onClick={() => setShowImeipopup(false)}>
@@ -297,6 +320,7 @@ const TransactionDetails = () => {
           </ModalFooter>
         </Modal>   
     </div>
+    </UILoader>
   )
 }
 
