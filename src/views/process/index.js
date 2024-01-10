@@ -10,20 +10,56 @@ import Flatpickr from 'react-flatpickr'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 import '@styles/base/pages/app-invoice.scss'
+import { handleStatusFlag, gettransitList } from './store'
+import { useDispatch, useSelector } from 'react-redux'
+import { getUserData } from '@utils'
+import UILoader from "@components/ui-loader"
+import moment from 'moment'
+
 
 const ImportList = () => {
   // ** Store vars
   const navigate = useNavigate()
   const [transactionList, setTransactionList] = useState([])
-  const [picker, setPicker] = useState(new Date())
-
-  const getTransactionList = () => {
-    setTransactionList([{ id: '1', transaction_no:'2000', date: '01-01-2024 10:30 AM', total_products: 10, userId: '0765'}, { id: '2', transaction_no:'2001', date: '01-01-2024 12:00 PM', total_products: 20, userId: '09871' }, { id: '3', transaction_no:'3040', date: '02-01-2024 1:00 AM', total_products: 25, userId: '0922' }, { id: '4', transaction_no:'4009', date: '02-01-2024 4:30 PM', total_products: 30, userId: '0034'}, { id: '5', transaction_no:'5093', date: '04-01-2024 6:00 PM', total_products: 40, userId: '001' }])
-  }
+  const [fromDate, setFromDate] = useState(new Date())
+  const [toDate, setToDate] = useState(new Date())
+  const [loading, setLoading] = useState(false)
+  const user = getUserData()
+  const dispatch = useDispatch()
+  const store = useSelector(state => state.Process)
+  
+  // const getTransactionList = () => {
+  //   setTransactionList([{ id: '1', transaction_no:'2000', date: '01-01-2024 10:30 AM', total_products: 10, userId: '0765'}, { id: '2', transaction_no:'2001', date: '01-01-2024 12:00 PM', total_products: 20, userId: '09871' }, { id: '3', transaction_no:'3040', date: '02-01-2024 1:00 AM', total_products: 25, userId: '0922' }, { id: '4', transaction_no:'4009', date: '02-01-2024 4:30 PM', total_products: 30, userId: '0034'}, { id: '5', transaction_no:'5093', date: '04-01-2024 6:00 PM', total_products: 40, userId: '001' }])
+  // }
 
   useEffect(() => {
-    getTransactionList()
+    // getTransactionList()
+    setLoading(true)
+    dispatch(
+      gettransitList({
+        user_id: user && user.id,
+        fromdate: toDate ? moment(new Date(fromDate)).format("YYYY-MM-DD") : '',
+        todate: toDate ? moment(new Date(toDate)).format("YYYY-MM-DD") : ''
+      })
+    ) 
   }, [])
+
+  
+  useEffect(() => {
+    if (store.statusFlag === 1) {
+      setLoading(false)
+      dispatch(handleStatusFlag(0))
+    } else if (store.statusFlag === 2) {
+      setLoading(false)
+      dispatch(handleStatusFlag(0)) 
+    }
+  }, [store.statusFlag])
+
+    useEffect(() => {
+    if (store.transitList && store.transitList.length > 0) {
+      setTransactionList(store.transitList)
+    }
+  }, [store.transitList])
 
    const viewtransaction_details = () => {
     navigate('/process/viewTransactiondetails')
@@ -66,7 +102,7 @@ const ImportList = () => {
       cell: row => {
         return (
           <div className='justify-content-left align-items-center paddingtop-1'>
-            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.date}</h6>
+            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.created_at}</h6>
           </div>
 
         )
@@ -81,7 +117,7 @@ const ImportList = () => {
       cell: (row) => {
         return (
           <div className='justify-content-left align-items-center paddingtop-1'>
-            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{'#'}{row.userId}</h6>
+            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{'#'}{row.user_id}</h6>
           </div>
 
         )
@@ -96,7 +132,7 @@ const ImportList = () => {
       cell: row => {
         return (
           <div className='justify-content-left align-items-center paddingtop-1'>
-            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.total_products}</h6>
+            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.tot_product}</h6>
           </div>          
         )
       }
@@ -118,6 +154,7 @@ const ImportList = () => {
   
 
   return (
+    <UILoader blocking={loading}>
     <div className="invoice-list-wrapper">
       <Card>
         <CardHeader className='border-bottom'>
@@ -149,8 +186,8 @@ const ImportList = () => {
             <div className='mb-1' style={{marginRight: '1%'}}>
               <h6 className='invoice-to-title'>From Date</h6>
                 <Flatpickr
-                  value={picker}
-                  onChange={date => setPicker(date)}
+                  value={fromDate}
+                  onChange={date => setFromDate(date)}
                   options={{ maxDate: new Date(), dateFormat: 'd-m-Y' }}
                   className='form-control invoice-edit-input date-picker'
                 />
@@ -158,8 +195,8 @@ const ImportList = () => {
               <div className='mb-1' style={{marginRight: '2%'}}>
               <h6 className='invoice-to-title'>To Date</h6>
                 <Flatpickr
-                  value={picker}
-                  onChange={date => setPicker(date)}
+                  value={toDate}
+                  onChange={date => setToDate(date)}
                   options={{ maxDate: new Date(), dateFormat: 'd-m-Y' }}
                   className='form-control invoice-edit-input date-picker'
                 />
@@ -205,6 +242,7 @@ const ImportList = () => {
         </CardBody>
       </Card>
     </div>
+    </UILoader>
   )
 }
 

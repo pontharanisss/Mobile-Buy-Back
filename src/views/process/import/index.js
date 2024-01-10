@@ -75,6 +75,7 @@ const Import = () => {
     if (store.statusFlag === 1) {
       setLoading(false)
       dispatch(handleStatusFlag(0))
+      setTableData([])
        toast.success(store.message, { duration: 2000, style:{color:'#000', backgroundColor:'#d7d2d2'} })     
     } else if (store.statusFlag === 2) {
       setLoading(false)
@@ -82,7 +83,7 @@ const Import = () => {
       toast.error(store.message, { duration: 2000, style:{color:'#000', backgroundColor:'#d7d2d2'} })
     }
   }, [store.statusFlag])
-
+  
 
   const handleSort = () => {
     // Define sorting logic here
