@@ -12,60 +12,189 @@ import Flatpickr from 'react-flatpickr'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
 import '../../../assets/style/style.css'
 import toast from 'react-hot-toast'
+import { useDispatch } from 'react-redux'
+import { fetchIMEIData, getmaster, Productcancelled, List, deletelist } from './store'
+import { getUserData } from '@utils'
 
 const ProductCancel = () => {
-  // ** Store vars
-  // const navigate = useNavigate()
-  const [cancelledProducts, setCancelledProducts] = useState([])
-  const [productList, setProductList] = useState([])
-  const [imei_number, setIMEI_NUMBER] = useState({})
+ const [cancelledProducts, setCancelledProducts] = useState([])
+ const [imei_number, setIMEI_NUMBER] = useState({})
   const [productCancelModal, setProductCancelModal] = useState(false)
   const [reason, setReason] = useState('')
   const [deleteModal, setDeleteModal] = useState(false)
+  const [transactionNo, setTransactionNo] = useState('')
   const [selectedReason, setSelectedReason] = useState('')
   const [picker, setPicker] = useState(new Date())
   const [showImeipopup, setShowImeipopup] = useState(false)
   const [imeidetails, setImeidetails] = useState('')
-  // const viewSales = () => {
-  //   navigate('/transaction/sales/add')
-  // }
+  const [imeiNumbers, setImeiNumbers] = useState([])
+  const [selectedIMEINumber, setSelectedIMEINumber] = useState(null)
+  const [reasonList, setReasonList] = useState([])
+  const [imeiList, setimeiList] = useState([])
+  const [successMessage, setSuccessMessage] = useState('')
+  const [deleteMessage, setdeleteMessage] = useState('')
+  const dispatch = useDispatch()
+  const user = getUserData()
+ 
+   useEffect(() => {
+   if (user && user.accessToken) {
+      dispatch(fetchIMEIData(user && user.id))
+        .then((response) => {
+          if (response.payload && response.payload.imeiList) {
+            const imeiList = response.payload.imeiList
+            setImeiNumbers(imeiList)
+           }
+        })
+        .catch((error) => {
+          console.error('Error fetching IMEI data:', error)
+        })
+    }
+  }, [dispatch])
 
-  const getCancelledProducts = () => {
-    setCancelledProducts([
-      { id: '1', imei_no: '3539061123213123', product_name: 'iPhone 11 Pro', brand: 'Apple', reason: 'Loss', purchase_amount: '1,00000', servify_amount: '5,000', vat_amount: '200', details: 'damage', reasons: 'Display not working', user:'#001', date:'01/12/2024', time:'11:24AM' },
-      { id: '2', imei_no: '3539061123213145', product_name: 'Nokia RT 800 ', brand: 'Nokia', reason: 'Loss', purchase_amount: '50,000', servify_amount: '2,000 ', vat_amount: '100', details: 'loss', reasons:  'Fault in screen', user:'#002', date:'01/12/2024',  time:'1:24PM' },
-      { id: '3', imei_no: '4984061123213123', product_name: 'Redmi 8A Dual', brand: 'MI', reason: 'Loss', purchase_amount: '20,000 ', servify_amount: '1,000', vat_amount: '200', details: 'damage', reasons: 'Over hanging', user:'#003', date:'01/12/2024',  time:'5:00PM'  },
-      { id: '4', imei_no: '8722161123213123', product_name: 'Samsung Galaxy 2', brand: 'Samsung', reason: 'Loss', purchase_amount: '10,000', servify_amount: '3,000', vat_amount: '300', details: 'loss', reasons: 'Not working', user:'#004', date:'01/12/2024',  time:'1:24AM'  },
-      { id: '5', imei_no: '351906112321343', product_name: 'OPPO V 8', brand: 'OPPO', reason: 'Loss', purchase_amount: '40,000', servify_amount: '4,000', vat_amount: '503', details: 'damage', reasons: 'Display bug', user:'#005', date:'01/12/2024',  time:'11:48PM' }
-    ])
+  useEffect(() => {
+    
+    if (user && user.accessToken) {
+      const requestData = {
+        role_id: 1,
+        user_id: user && user.id
+      }
+      dispatch(getmaster(requestData))
+        .then((response) => {
+          if (response.payload && response.payload.reasonList) {
+            const reasonList = response.payload.reasonList
+            setReasonList(reasonList)
+            }
+        })
+        .catch((error) => {
+          console.error('Error fetching userroleList:', error)
+        })
+    }
+  }, [dispatch])
 
-    setProductList([
-      { id: '1', imei_no: '4532612121212121', product_name: 'APPLE 11 Pro', brand: 'Apple', purchase_amount: '100000', servify_amount: '5000', vat_amount: '200' },
-      { id: '2', imei_no: '6534343434343421', product_name: 'Nokia RT 800 ', brand: 'Nokia', purchase_amount: '50000', servify_amount: '2000 ', vat_amount: '100' },
-      { id: '3', imei_no: '554323213213121', product_name: 'Redmi 8A Dual', brand: 'MI', purchase_amount: '20000 ', servify_amount: '1000', vat_amount: '200' },
-      { id: '4', imei_no: '453222311212121', product_name: 'Samsung Galaxy 2', brand: 'Samsung', purchase_amount: '10000', servify_amount: '3000', vat_amount: '300' },
-      { id: '5', imei_no: '65756756756756', product_name: 'OPPO V 8', brand: 'OPPO', purchase_amount: '40000', servify_amount: '4000', vat_amount: '503' }
-    ])
+  const deletelisttable = async () => {
+   try {
+      const requestData = {
+        user_id: user && user.id,
+        transaction_no: transactionNo
+       }
+        const response = await dispatch(deletelist(requestData))
+      if (response.payload && response.payload.message) {
+       const deletemessage = response.payload.message
+        setdeleteMessage(deletemessage)
+        setTransactionNo('')
+        setDeleteModal(false)
+         }
+      const listResponse = await dispatch(List(1))
+      if (listResponse.payload && listResponse.payload.imeiList) {
+        const imeiList = listResponse.payload.imeiList
+         setimeiList(imeiList)
+        }
+    } catch (error) {
+      console.error('Error canceling product:', error)
+    } finally {
+     
+    }
+  }
+    if (deleteMessage) {
+    toast.success(deleteMessage, {
+      duration: 2000,
+      style: { color: '#000', backgroundColor: '#d7d2d2' }
+    })
+      setdeleteMessage('')
   }
 
   useEffect(() => {
-    getCancelledProducts()
-  }, [])
+  if (user && user.accessToken) {
+     dispatch(List(user && user.id))
+      .then((response) => {
+          if (response.payload && response.payload.imeiList) {
+            const imeiList = response.payload.imeiList
+              setimeiList(imeiList)
+             }
+        })
+        .catch((error) => {
+          console.error('Error fetching userroleList:', error)
+        })
+    }
+  }, [dispatch])
 
-  
   const showImeiDetails = (row) => {
     setImeidetails(row)
     setShowImeipopup(!showImeipopup)
   }
 
-  const imei_numbers = [{label: '4532612121212121', value: '4532612121212121'}, {label: '6534343434343421', value: '6534343434343421'}, {label: '554323213213121', value: '554323213213121'}, {label: '453222311212121', value: '453222311212121'}, {label: '65756756756756', value: '65756756756756'}]
-  const Reasons = [{label: 'Lost', value: 'lost'}, {label: 'damage', value: 'damage'}]
+  const Product = async () => {
+    try {
+      if (!selectedReason) {
+        toast.error('Please select a reason.', {
+          duration: 2000,
+          style: { color: '#000', backgroundColor: '#d7d2d2' }
+        })
+        return
+      }
+  
+      const newProduct = {
+        id: (cancelledProducts.length + 1).toString(),
+        reason: selectedReason.label,
+        imei_number: selectedIMEINumber
+      }
+  
+      const updatedProducts = [...cancelledProducts, newProduct]
+      setCancelledProducts(updatedProducts)
+      setProductCancelModal(!productCancelModal)
+    } catch (error) {
+      console.error('Error canceling product:', error)
+    }
+  
+    try {
+      const totalAmount =
+        imei_number.purchase_amount +
+        imei_number.servify +
+        imei_number.gst
+    
+      const requestData = {
+        user_id: user && user.id,
+        imei_no: selectedIMEINumber.value,
+        reason_code: selectedReason && Number(selectedReason.value),
+        remarks: reason,
+        total_amount: totalAmount.toString()
+      }
+  
+      const response = await dispatch(Productcancelled(requestData))
+      if (response.payload && response.payload.message) {
+        const message = response.payload.message
+        setSuccessMessage(message)
+      }
+      const listResponse = await dispatch(List(user && user.id))
+      if (listResponse.payload && listResponse.payload.imeiList) {
+        const imeiList = listResponse.payload.imeiList
+         setimeiList(imeiList)
+       }
+    } catch (error) {
+      console.error('Error canceling product:', error)
+    } finally {
+      setProductCancelModal(!productCancelModal)
+    }
+  }
+  
+  if (successMessage) {
+    toast.success(successMessage, {
+      duration: 2000,
+      style: { color: '#000', backgroundColor: '#d7d2d2' }
+    })
+       setSuccessMessage('')
+  } 
+  const showDeletePopup = (transaction_no) => {
+    setTransactionNo(transaction_no)
+    setDeleteModal(true)
+  }
+
   const columns = [ 
     {
-      name: 'S.No.',
+      name: 'S No.',
       sortable: true,
       minWidth: '2px',
-      id: 'id',
+      id: 'S no',
       cell: (row, index)  => {
         return (
           <div className='justify-content-left align-items-center paddingtop-1'>
@@ -78,7 +207,7 @@ const ProductCancel = () => {
       name: 'IMEI No.',
       sortable: true,
       minWidth: '200px',
-      id: 'id',
+      id: 'imei_no',
       cell: (row)  => {
         return (
           <div className='justify-content-left align-items-center paddingtop-1'>
@@ -117,11 +246,11 @@ const ProductCancel = () => {
         return (
           <div className='d-flex flex-column align-items-start paddingtop-1'>
             <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>
-              <span>{row.reasons}</span>
-              {row.details && (
+              <span>{row.reason}</span>
+              {row.remarks && (
                 <>
                   <br />
-                  <small style={{ fontSize: '10px', textAlign: 'left' }}>{row.details}</small>
+                  <small style={{ fontSize: '10px', textAlign: 'left' }}>{row.remarks}</small>
                 </>
               )}
             </h6>
@@ -132,16 +261,16 @@ const ProductCancel = () => {
     {
       name: 'User id',
       sortable: true,
-      minWidth: '90px',
+      minWidth: '150px',
       id: 'user_id',
       selector: (row) => row.user,
       cell: (row) => {
         return (
           <div className='d-flex flex-column align-items-start paddingtop-1'>
-            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.user}</h6>
-            <div className='d-flex justify-content-center align-items-center w-100'>
-              <span className='brand-name' style={{ fontSize: '10px', textAlign: 'center' }}>
-                {row.date} &nbsp; {row.time}
+            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.user_id}</h6>
+            <div className='d-flex justify-content-center align-items-start w-100'>
+              <span className='brand-name' style={{ fontSize: '10px', textAlign: 'left' }}>
+                {row.created_at} &nbsp; {row.time}
               </span>
             </div>
           </div>
@@ -153,12 +282,12 @@ const ProductCancel = () => {
       sortable: true,
       right:true,
       minWidth: '90px',
-      id: 'purchase_amount',
-      selector: row => row.purchase_amount,
+      id: 'total_amount',
+      selector: row => row.total_amount,
       cell: row => {
         return (
           <div className='d-flex flex-column align-items-start paddingtop-1'>
-            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.purchase_amount}</h6>
+            <h6 className='user-name text-truncate mb-0 wraptext vertical_align'>{row.total_amount}</h6>
           </div>
  )
       }
@@ -168,7 +297,7 @@ const ProductCancel = () => {
       minWidth: '110px',
       cell: (row, index) => (
         <div className='column-action d-flex align-items-center'>          
-          <Trash size={14} className='me-50' id={`delete-tooltip-${index}`} onClick={() => setDeleteModal(true)}/>
+          <Trash size={14} className='me-50' id={`delete-tooltip-${index}`} onClick={() => showDeletePopup(row.transaction_no)}/>
           <UncontrolledTooltip placement='top' target={`delete-tooltip-${index}`}>
             Delete
         </UncontrolledTooltip>
@@ -190,38 +319,18 @@ const ProductCancel = () => {
     setProductCancelModal(!productCancelModal)
   }
 
-  const cancelProduct = () => {
-    if (!selectedReason) {
-      toast.error('Please select a reason.', {
-        duration: 2000,
-        style: { color: '#000', backgroundColor: '#d7d2d2' }
-      })
-      return
-    }
-  
-    const newProduct = {
-      id: (cancelledProducts.length + 1).toString(),
-      reason: selectedReason.label, 
-      imei_number 
-    }
-  
-    const updatedProducts = [...cancelledProducts, newProduct]
-    setCancelledProducts(updatedProducts)
-    setProductCancelModal(!productCancelModal)
-  }
-
   const onChangeIMEI_Number = (data) => {
-    const findimei = productList.filter(e => e.imei_no === data.value)[0]
-    const selImei_no = {...findimei, value:findimei.imei_no, label:findimei.imei_no}
-    setIMEI_NUMBER(selImei_no)
+    setSelectedIMEINumber(data)
+    setIMEI_NUMBER(data)
+    const selectedIMEIDetails = imeiNumbers.find((imei) => imei.imei_no === data.value)
+    setIMEI_NUMBER(selectedIMEIDetails)
   }
 
   const onChangereasons = (data) => {
     setSelectedReason(data)
   }
-
   
-  return (
+ return (
     <div className="cancelled-products-list-wrapper">
       <Card>
         <CardHeader className='border-bottom'>
@@ -267,8 +376,7 @@ const ProductCancel = () => {
                   <Button onClick={() => AddCancelProduct()} color='primary'>Add</Button>
                 </div>
               </Col>
-              <Col
-                lg='4'
+              <Col lg='4'
                 className='actions-right d-flex align-items-center justify-content-lg-end flex-lg-nowrap flex-wrap mt-lg-0 mt-1 pe-lg-1 p-0'
               >
                 <div className='d-flex align-items-center'>
@@ -287,38 +395,33 @@ const ProductCancel = () => {
         <CardBody className='invoice-padding' style={{paddingTop:'0px', paddingBottom:'3%'}}>
         <div className='sc-dmctIk fuLPYh react-dataTable'>
           <DataTable
-            // noDataComponent="There are no records to display"
-            // subHeader={true}
             pagination
             columns={columns}
             responsive={true}
-            data={cancelledProducts}
+            data={imeiList}
             sortIcon={<ChevronDown />}
             className='react-dataTable'
             defaultSortField='id'
-            //  selectableRows
-            // onSelectedRowsChange={handleChange}
+           
           />
           </div>
-          
-        </CardBody>
+         </CardBody>
       </Card>
       <Modal isOpen={productCancelModal} toggle={() => setProductCancelModal(!productCancelModal)}
         className='vertically-centered-modal' fade={false}>
         <ModalHeader toggle={() => setProductCancelModal(!productCancelModal)} style={{backgroundColor: '#b3003b !important'}}>Cancel Product</ModalHeader>
         <ModalBody>
-  <div className='mb-2'>
-    <Label className='form-label required' for='email'>
-      IMEI Number
-    </Label>
-    <Select
-      isClearable={false}
-      options={imei_numbers}
-      className='react-select'
-      value={imei_number}
-      onChange={(e) => onChangeIMEI_Number(e)}
-    />
-  </div>
+        <div className='mb-2'>
+            <Label className='form-label required' for='imei_number'>
+              IMEI Number
+            </Label>
+            <Select
+              isClearable={false}
+              options={imeiNumbers.map((imei) => ({ value: imei.imei_no, label: imei.imei_no }))}
+              className='react-select'
+              onChange={(e) => onChangeIMEI_Number(e)}
+            />
+          </div>
   <Row className='mb-2'>
     <Col md='4'>
       <Label className='form-label' for='email'>
@@ -346,26 +449,31 @@ const ProductCancel = () => {
       </Label>
     </Col>
     <Col>
-      <span>{imei_number && imei_number.purchase_amount}</span>
+      <span>{imei_number && imei_number.sku}</span>
     </Col>
   </Row>
   <Row className='mb-2'>
-    <Col md='4'>
-      <Label className='form-label' for='email'>
-        Total Amount:
-      </Label>
-    </Col>
-    <Col>
-      <span>{imei_number && imei_number.servify_amount}</span>
-    </Col>
-  </Row>
+  <Col md='4'>
+    <Label className='form-label' for='email'>
+      Total Amount:
+    </Label>
+  </Col>
+  <Col>
+    <span>
+      {imei_number &&
+        (imei_number.purchase_amount +
+          imei_number.servify +
+          imei_number.gst)}
+    </span>
+  </Col>
+</Row>
   <div className='mb-2'>
             <Label className='form-label required' for='email'>
                Reasons
             </Label>
             <Select
               isClearable={false}
-              options={Reasons}
+              options={reasonList.map((reason) => ({ value: reason.value.toString(), label: reason.label }))}
               className='react-select'
               value={selectedReason}
               onChange={(e) => onChangereasons(e)}
@@ -379,7 +487,7 @@ const ProductCancel = () => {
              </div>         
          </ModalBody>
         <ModalFooter>
-          <Button color='primary' onClick={() => cancelProduct()} >           
+          <Button color='primary' onClick={Product} >           
             Cancel
           </Button>{' '}
           <Button color='primary' outline onClick={() => closeCancelProduct()}>
@@ -387,7 +495,7 @@ const ProductCancel = () => {
           </Button>{' '}
         </ModalFooter>
       </Modal>
-<Modal isOpen={deleteModal} toggle={() => setDeleteModal(!deleteModal)} 
+      <Modal isOpen={deleteModal} toggle={() => setDeleteModal(!deleteModal)} 
         className='vertically-centered-modal' fade={false}>
           <ModalHeader toggle={() => setDeleteModal(!deleteModal)}>Confirmation</ModalHeader>
           <ModalBody>
@@ -398,7 +506,7 @@ const ProductCancel = () => {
             </div>            
           </ModalBody>
           <ModalFooter>
-            <Button color='primary' onClick={() => setDeleteModal(false)}>
+            <Button color='primary' onClick={deletelisttable}>
               Yes
             </Button>{' '}
             <Button color='primary' outline onClick={() => setDeleteModal(false)}>
@@ -425,7 +533,7 @@ const ProductCancel = () => {
                 Product Name :
               </Label>  </Col>
               <Col sm='6'>
-              <p className='mb-25 font-16'>Redmi 8A</p>  </Col>       
+              <p className='mb-25 font-16'>{imeidetails.product_name}</p>  </Col>       
             </Row>
 
             <Row className='mb-2'> 
@@ -434,7 +542,7 @@ const ProductCancel = () => {
                 Brand :
               </Label> </Col> 
               <Col sm='6'>
-              <p className='mb-25 font-16'>Redmi</p>     </Col>    
+              <p className='mb-25 font-16'>{imeidetails.brand}</p>     </Col>    
             </Row>
 
             <Row className='mb-2'> 
@@ -443,7 +551,7 @@ const ProductCancel = () => {
                 Purchase Amount :
               </Label>  </Col>
               <Col sm='6'>
-              <p className='mb-25 font-16'>20,000</p> </Col>        
+              <p className='mb-25 font-16'>{imeidetails.purchase_amount}</p> </Col>        
             </Row>
             <Row className='mb-2'> 
             <Col sm='6'>
@@ -451,7 +559,7 @@ const ProductCancel = () => {
                 Servify Fee :
               </Label>  </Col>
               <Col sm='6'>
-              <p className='mb-25 font-16'>1,000</p> </Col>        
+              <p className='mb-25 font-16'>{imeidetails.servify}</p> </Col>        
             </Row>
             <Row className='mb-2'> 
             <Col sm='6'>
@@ -459,7 +567,7 @@ const ProductCancel = () => {
                 VAT Amount :
               </Label>  </Col>
               <Col sm='6'>
-              <p className='mb-25 font-16'>10</p>   </Col>      
+              <p className='mb-25 font-16'>{imeidetails.gst}</p>   </Col>      
             </Row>
 
             <Row className='mb-2'> 
@@ -468,7 +576,7 @@ const ProductCancel = () => {
                 Sales Amount :
               </Label>  </Col>
               <Col sm='6'>
-              <p className='mb-25 font-16'>25,000</p></Col>         
+              <p className='mb-25 font-16'></p></Col>         
             </Row>  
             <Row className='mb-2'> 
             <Col sm='6'>
@@ -476,7 +584,7 @@ const ProductCancel = () => {
                 SKU Attributes :
               </Label>  </Col>
               <Col sm='6'>
-              <p className='mb-25 font-16'>Midnight Grey| 4GB</p>   </Col>      
+              <p className='mb-25 font-16'>{imeidetails.sku}</p>   </Col>      
             </Row>                          
           </ModalBody>
           <ModalFooter>            
